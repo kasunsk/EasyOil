@@ -2,16 +2,19 @@ package com.oilseller.oilbrocker.sellingItem.entity;
 
 import com.sun.xml.internal.ws.spi.db.DatabindingException;
 
+import javax.persistence.Entity;
 import java.util.Date;
 
 /**
  * Created by kasun on 2/21/18.
  */
+@Entity
 public class SellingItemEntity {
 
     private Long id;
     private String sellingItem;
     private String description;
+    private String status;
     private Long price;
     private String currency;
     private String image;
@@ -41,6 +44,14 @@ public class SellingItemEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Long getPrice() {

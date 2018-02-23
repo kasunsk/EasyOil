@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface SellingItemDao {
 
-    List<SellingItemEntity> getSellingItems();
+    List<SellingItemEntity> getAvailableSellingItems();
 
     Long addSellingItem(SellingItemEntity sellingItemEntity);
 }

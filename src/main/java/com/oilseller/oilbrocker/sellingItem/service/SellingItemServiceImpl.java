@@ -5,6 +5,7 @@ import com.oilseller.oilbrocker.sellingItem.dao.SellingItemDao;
 import com.oilseller.oilbrocker.sellingItem.dto.SellingItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,11 +24,13 @@ public class SellingItemServiceImpl implements SellingItemService {
 
     private SellingItemAdaptor sellingItemAdaptor = new SellingItemAdaptor();
 
+    @Transactional
     @Override
     public List<SellingItem> loadAllSellingItems() {
-        return sellingItemAdaptor.adapt(sellingItemDao.getSellingItems());
+        return sellingItemAdaptor.adapt(sellingItemDao.getAvailableSellingItems());
     }
 
+    @Transactional
     @Override
     public Long addSellingItem(SellingItem sellingItem) {
         validateSellingItem(sellingItem);
