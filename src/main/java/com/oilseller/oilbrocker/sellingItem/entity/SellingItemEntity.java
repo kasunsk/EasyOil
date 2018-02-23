@@ -1,7 +1,5 @@
 package com.oilseller.oilbrocker.sellingItem.entity;
 
-import com.sun.xml.internal.ws.spi.db.DatabindingException;
-
 import javax.persistence.Entity;
 import java.util.Date;
 
