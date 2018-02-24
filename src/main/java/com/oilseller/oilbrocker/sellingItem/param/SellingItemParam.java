@@ -1,49 +1,21 @@
-package com.oilseller.oilbrocker.sellingItem.entity;
+package com.oilseller.oilbrocker.sellingItem.param;
 
-import com.oilseller.oilbrocker.platform.entity.AbstractTrackableEntity;
 
-import javax.persistence.*;
-import java.util.Date;
+public class SellingItemParam {
 
-/**
- * Created by kasun on 2/21/18.
- */
-@Entity
-@Table(name = "SELLING_ITEM")
-public class SellingItemEntity extends AbstractTrackableEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ITEM_ID", nullable = false)
     private Long id;
-
-    @Column(name = "ITEM_REFERENCE", nullable = false)
     private String itemReference;
-
-    @Column(name = "ITEM_NAME", nullable = false)
     private String sellingItem;
-
-    @Column(name = "AVAILABLE_AMOUNT", nullable = false)
     private Long availableAmount;
-
-    @Column(name = "DESCRIPTION", nullable = false)
     private String description;
-
-    @Column(name = "STATUS", nullable = false)
-    private String status;
-
-    @Column(name = "PRICE", nullable = false)
     private Long price;
-
-    @Column(name = "CURRENCY", nullable = false)
     private String currency;
-
-    @Column(name = "IMAGE_URL", nullable = false)
+    private String status;
     private String image;
-
-    @Column(name = "VALID_TO", nullable = false)
-    private Date validTo;
-
+    private String validUntil;
+    private String createdDate;
+    private String lastModifiedDate;
+    private Long version;
 
     public Long getId() {
         return id;
@@ -85,14 +57,6 @@ public class SellingItemEntity extends AbstractTrackableEntity {
         this.description = description;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public Long getPrice() {
         return price;
     }
@@ -109,6 +73,14 @@ public class SellingItemEntity extends AbstractTrackableEntity {
         this.currency = currency;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getImage() {
         return image;
     }
@@ -117,11 +89,35 @@ public class SellingItemEntity extends AbstractTrackableEntity {
         this.image = image;
     }
 
-    public Date getValidTo() {
-        return validTo;
+    public String getValidUntil() {
+        return validUntil;
     }
 
-    public void setValidTo(Date validTo) {
-        this.validTo = validTo;
+    public void setValidUntil(String validUntil) {
+        this.validUntil = validUntil;
+    }
+
+    public String getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public String getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(String lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

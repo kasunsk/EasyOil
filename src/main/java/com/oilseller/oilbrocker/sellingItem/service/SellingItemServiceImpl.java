@@ -27,14 +27,14 @@ public class SellingItemServiceImpl implements SellingItemService {
     @Transactional
     @Override
     public List<SellingItem> loadAllSellingItems() {
-        return sellingItemAdaptor.adapt(sellingItemDao.getAvailableSellingItems());
+        return sellingItemAdaptor.fromModelList(sellingItemDao.getAvailableSellingItems());
     }
 
     @Transactional
     @Override
     public Long addSellingItem(SellingItem sellingItem) {
         validateSellingItem(sellingItem);
-        return sellingItemDao.addSellingItem(sellingItemAdaptor.adapt(sellingItem));
+        return sellingItemDao.addSellingItem(sellingItemAdaptor.fromDto(sellingItem));
     }
 
     private void validateSellingItem(SellingItem sellingItem) {
