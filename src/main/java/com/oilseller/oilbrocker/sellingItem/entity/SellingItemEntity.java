@@ -1,24 +1,49 @@
 package com.oilseller.oilbrocker.sellingItem.entity;
 
-import javax.persistence.Entity;
+import com.oilseller.oilbrocker.platform.entity.AbstractTrackableEntity;
+
+import javax.persistence.*;
 import java.util.Date;
 
 /**
  * Created by kasun on 2/21/18.
  */
 @Entity
-public class SellingItemEntity {
+@Table(name = "SELLING_ITEM")
+public class SellingItemEntity extends AbstractTrackableEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID", nullable = false)
     private Long id;
+
+    @Column(name = "ITEM_REFERENCE", nullable = false)
+    private String itemReference;
+
+    @Column(name = "ITEM_NAME", nullable = false)
     private String sellingItem;
+
+    @Column(name = "AVAILABLE_AMOUNT", nullable = false)
+    private Long availableAmount;
+
+    @Column(name = "DESCRIPTION", nullable = false)
     private String description;
+
+    @Column(name = "STATUS", nullable = false)
     private String status;
+
+    @Column(name = "PRICE", nullable = false)
     private Long price;
+
+    @Column(name = "CURRENCY", nullable = false)
     private String currency;
+
+    @Column(name = "IMAGE_URL", nullable = false)
     private String image;
-    private Date createdDate;
-    private Date lastModifiedDate;
-    private Long version;
+
+    @Column(name = "VALID_TO", nullable = false)
+    private Date validTo;
+
 
     public Long getId() {
         return id;
@@ -28,12 +53,28 @@ public class SellingItemEntity {
         this.id = id;
     }
 
+    public String getItemReference() {
+        return itemReference;
+    }
+
+    public void setItemReference(String itemReference) {
+        this.itemReference = itemReference;
+    }
+
     public String getSellingItem() {
         return sellingItem;
     }
 
     public void setSellingItem(String sellingItem) {
         this.sellingItem = sellingItem;
+    }
+
+    public Long getAvailableAmount() {
+        return availableAmount;
+    }
+
+    public void setAvailableAmount(Long availableAmount) {
+        this.availableAmount = availableAmount;
     }
 
     public String getDescription() {
@@ -76,27 +117,11 @@ public class SellingItemEntity {
         this.image = image;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
+    public Date getValidTo() {
+        return validTo;
     }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public Date getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
+    public void setValidTo(Date validTo) {
+        this.validTo = validTo;
     }
 }

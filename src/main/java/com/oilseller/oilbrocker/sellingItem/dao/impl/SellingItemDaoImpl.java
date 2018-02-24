@@ -1,6 +1,6 @@
 package com.oilseller.oilbrocker.sellingItem.dao.impl;
 
-import com.oilseller.oilbrocker.platform.AbstractHibernateDao;
+import com.oilseller.oilbrocker.platform.dao.AbstractHibernateDao;
 import com.oilseller.oilbrocker.sellingItem.dao.SellingItemDao;
 import com.oilseller.oilbrocker.sellingItem.entity.SellingItemEntity;
 import org.hibernate.Query;

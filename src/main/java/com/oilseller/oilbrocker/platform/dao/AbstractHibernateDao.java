@@ -1,4 +1,4 @@
-package com.oilseller.oilbrocker.platform;
+package com.oilseller.oilbrocker.platform.dao;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
