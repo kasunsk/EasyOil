@@ -1,4 +1,4 @@
-package com.oilseller.oilbrocker.sellingItem.config;
+package com.oilseller.oilbrocker.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

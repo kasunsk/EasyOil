@@ -1,4 +1,4 @@
-package com.oilseller.oilbrocker.sellingItem.config;
+package com.oilseller.oilbrocker.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +24,7 @@ public class HibernateConfig {
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan("com.oilseller.oilbrocker.");
+        sessionFactory.setPackagesToScan("com.oilseller.oilbrocker.sellingItem.entity", "com.oilseller.oilbrocker.order.entity");
         sessionFactory.setHibernateProperties(hibernateProperties());
         return sessionFactory;
     }
