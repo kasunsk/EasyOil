@@ -1,13 +1,11 @@
 package com.oilseller.oilbrocker.order.service.impl;
 
 import com.oilseller.oilbrocker.order.adaptor.CustomerModelAdaptor;
+import com.oilseller.oilbrocker.order.adaptor.OrderDetailModelAdaptor;
 import com.oilseller.oilbrocker.order.adaptor.OrderPlacementEntityAdaptor;
 import com.oilseller.oilbrocker.order.dao.CustomerDao;
 import com.oilseller.oilbrocker.order.dao.OrderDao;
-import com.oilseller.oilbrocker.order.dto.Customer;
-import com.oilseller.oilbrocker.order.dto.OrderPlacementRequest;
-import com.oilseller.oilbrocker.order.dto.OrderPlacementResponse;
-import com.oilseller.oilbrocker.order.dto.OrderStatus;
+import com.oilseller.oilbrocker.order.dto.*;
 import com.oilseller.oilbrocker.order.entity.OrderPlacementEntity;
 import com.oilseller.oilbrocker.order.service.OrderService;
 import com.oilseller.oilbrocker.sellingItem.dto.SellingItem;
@@ -17,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 @Service("orderService")
 public class OrderServiceImpl implements OrderService {
@@ -26,6 +25,7 @@ public class OrderServiceImpl implements OrderService {
     private SellingItemService sellingItemService;
     private CustomerModelAdaptor customerModelAdaptor = new CustomerModelAdaptor();
     private OrderPlacementEntityAdaptor orderPlacementModelAdaptor = new OrderPlacementEntityAdaptor();
+    private OrderDetailModelAdaptor orderModelAdaptor = new OrderDetailModelAdaptor();
 
     @Autowired
     public OrderServiceImpl(CustomerDao customerDao, OrderDao orderDao ,SellingItemService sellingItemService) {
@@ -52,7 +52,7 @@ public class OrderServiceImpl implements OrderService {
         orderEntity.setOrderItem(sellingItem.getSellingItem());
         Long customerId = customerDao.addCustomer(customerModelAdaptor.fromDto(orderPlacementRequest.getCustomer()));
         orderEntity.setCustomerId(customerId);
-        orderEntity.setPaymentReference("ON_DELIVERY");
+        orderEntity.setPaymentReference("COD");
         orderEntity.setOrderStatus(OrderStatus.PLACED);
         orderDao.createOrder(orderEntity);
 
@@ -62,8 +62,30 @@ public class OrderServiceImpl implements OrderService {
         return orderPlacementResponse;
     }
 
+    @Transactional
+    @Override
+    public List<OrderDetail> viewOrders() {
+        return orderModelAdaptor.fromModelList(orderDao.loadOrders());
+    }
+
     private String generateOrderReference(OrderPlacementRequest orderPlacementRequest) {
-        return (new Date()).getTime() + orderPlacementRequest.getOrderItemId() + orderPlacementRequest.getCustomer().getMobileNumber();
+
+        String name = orderPlacementRequest.getCustomer().getCustomerName();
+        String partOne = name.substring(0, 2);
+
+        String currentTime = new Date().getTime() + "";
+        String partThree = currentTime.substring(currentTime.length() - 2, currentTime.length());
+
+        String address = orderPlacementRequest.getCustomer().getCustomerAddress();
+        String partTwo = address.substring(0,2);
+
+        String partFour = orderPlacementRequest.getOrderItemId() + "";
+
+        String mobile = orderPlacementRequest.getCustomer().getMobileNumber();
+        String partFive = mobile.substring(mobile.length()-3, mobile.length());
+
+        String reference = partOne + partTwo + partThree + partFour + partFive;
+        return reference.toLowerCase().trim();
     }
 
     private void validateOrderPlacement(OrderPlacementRequest orderPlacementRequest) {

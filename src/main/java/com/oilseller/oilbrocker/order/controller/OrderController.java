@@ -1,11 +1,13 @@
 package com.oilseller.oilbrocker.order.controller;
 
 import com.oilseller.oilbrocker.order.adaptor.CustomerParamAdaptor;
+import com.oilseller.oilbrocker.order.adaptor.OrderDetailParamAdaptor;
 import com.oilseller.oilbrocker.order.adaptor.OrderPlacementRequestParamAdaptor;
 import com.oilseller.oilbrocker.order.adaptor.OrderPlacementResponseParamAdaptor;
 import com.oilseller.oilbrocker.order.dto.OrderPlacementRequest;
 import com.oilseller.oilbrocker.order.dto.OrderPlacementResponse;
 import com.oilseller.oilbrocker.order.param.CustomerDetailsParam;
+import com.oilseller.oilbrocker.order.param.OrderDetailParam;
 import com.oilseller.oilbrocker.order.param.OrderPlacementRequestParam;
 import com.oilseller.oilbrocker.order.param.OrderPlacementResponseParam;
 import com.oilseller.oilbrocker.order.service.OrderService;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 
 @RestController
@@ -24,6 +28,7 @@ public class OrderController {
     private CustomerParamAdaptor customerParamAdaptor = new CustomerParamAdaptor();
     private OrderPlacementRequestParamAdaptor orderPlacementParamAdaptor = new OrderPlacementRequestParamAdaptor();
     private OrderPlacementResponseParamAdaptor responseParamAdaptor = new OrderPlacementResponseParamAdaptor();
+    private OrderDetailParamAdaptor orderDetailParamAdaptor = new OrderDetailParamAdaptor();
 
 
     @Autowired
@@ -41,6 +46,11 @@ public class OrderController {
     @RequestMapping(value = "/customer", method = RequestMethod.POST)
     public Long addCustomer(@RequestBody CustomerDetailsParam customerDetailsParam) {
         return orderService.addCustomerDetails(customerParamAdaptor.fromParam(customerDetailsParam));
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public List<OrderDetailParam> viewOrders() {
+        return orderDetailParamAdaptor.fromDtoList(orderService.viewOrders());
     }
 
 }

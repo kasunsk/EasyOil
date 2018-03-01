@@ -1,53 +1,23 @@
-package com.oilseller.oilbrocker.order.entity;
+package com.oilseller.oilbrocker.order.dto;
 
-import com.oilseller.oilbrocker.order.dto.OrderStatus;
-import com.oilseller.oilbrocker.order.dto.PaymentStatus;
-import com.oilseller.oilbrocker.order.dto.PaymentType;
-import com.oilseller.oilbrocker.platform.entity.AbstractTrackableEntity;
+import java.util.Date;
 
-import javax.persistence.*;
+public class OrderDetail {
 
-@Entity
-@Table(name = "PLACED_ORDER")
-public class OrderPlacementEntity extends AbstractTrackableEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ORDER_ID", nullable = false)
     private Long orderId;
-
-    @Column(name = "ORDER_REFERENCE", nullable = false)
     private String orderReference;
-
-    @Column(name = "PAYMENT_REFERENCE", nullable = false)
     private String paymentReference;
-
-    @Column(name = "CUSTOMER_ID", nullable = false)
     private Long customerId;
-
-    @Column(name = "ORDER_ITEM", nullable = false)
-    private String OrderItem;
-
-    @Column(name = "AMOUNT", nullable = false)
+    private String orderItem;
     private Long amount;
-
-    @Column(name = "PRICE", nullable = false)
     private Long price;
-
-    @Column(name = "CURRENCY", nullable = false)
     private String currency;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "PAYMENT_TYPE", nullable = false)
     private PaymentType paymentType;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "PAYMENT_STATUS", nullable = false)
     private PaymentStatus paymentStatus;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "STATUS", nullable = false)
     private OrderStatus orderStatus;
+    private Date createdDate;
+    private Date lastModifiedDate;
+    private Long version;
 
     public Long getOrderId() {
         return orderId;
@@ -82,11 +52,11 @@ public class OrderPlacementEntity extends AbstractTrackableEntity {
     }
 
     public String getOrderItem() {
-        return OrderItem;
+        return orderItem;
     }
 
     public void setOrderItem(String orderItem) {
-        OrderItem = orderItem;
+        this.orderItem = orderItem;
     }
 
     public Long getAmount() {
@@ -135,5 +105,29 @@ public class OrderPlacementEntity extends AbstractTrackableEntity {
 
     public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Date lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }
