@@ -12,4 +12,6 @@ public interface SellingItemDao {
     List<SellingItemEntity> getAvailableSellingItems();
 
     Long addSellingItem(SellingItemEntity sellingItemEntity);
+
+    SellingItemEntity loadSellingItem(Long orderItemId);
 }

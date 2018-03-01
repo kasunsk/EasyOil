@@ -13,4 +13,5 @@ public interface SellingItemService {
 
     Long addSellingItem(SellingItem sellingItem);
 
+    SellingItem loadSellingItem(Long orderItem);
 }

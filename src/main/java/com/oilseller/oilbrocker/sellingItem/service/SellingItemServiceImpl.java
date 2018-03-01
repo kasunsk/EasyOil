@@ -37,6 +37,12 @@ public class SellingItemServiceImpl implements SellingItemService {
         return sellingItemDao.addSellingItem(sellingItemAdaptor.fromDto(sellingItem));
     }
 
+    @Transactional
+    @Override
+    public SellingItem loadSellingItem(Long orderItemId) {
+        return sellingItemAdaptor.fromModel(sellingItemDao.loadSellingItem(orderItemId));
+    }
+
     private void validateSellingItem(SellingItem sellingItem) {
 
     }

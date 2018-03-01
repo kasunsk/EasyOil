@@ -19,6 +19,11 @@ public class SellingItemDaoImpl extends AbstractHibernateDao implements SellingI
     }
 
     @Override
+    public SellingItemEntity loadSellingItem(Long orderItemId) {
+        return getSession().get(SellingItemEntity.class, orderItemId);
+    }
+
+    @Override
     public List<SellingItemEntity> getAvailableSellingItems() {
 
         String hql = "from SellingItemEntity si where si.status =:status";
