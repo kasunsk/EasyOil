@@ -53,6 +53,28 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
+    public List<OrderDetail> viewOrders() {
+        return orderModelAdaptor.fromModelList(orderDao.loadOrders());
+    }
+
+    @Transactional
+    @Override
+    public Boolean updateOrderStatus(Long orderId, OrderStatus toOrderStatus) {
+        OrderPlacementEntity order = orderDao.loadOrder(orderId);
+        OrderStatus currentOrderStatus = order.getOrderStatus();
+        order.setOrderStatus(toOrderStatus);
+        orderDao.saveOrUpdateOrder(order);
+        addHistoryItem(order,currentOrderStatus, toOrderStatus);
+        EmailParam emailParam = new EmailParam();
+        emailParam.setSubject("Order Status Changed");
+        emailParam.setReceiverAddress(customerDao.loadCustomerById(order.getCustomerId()).getEmail());
+        emailParam.setContent("Your order status changed to " + toOrderStatus);
+        emailService.sendEmail(emailParam);
+        return Boolean.TRUE;
+    }
+
+    @Transactional
+    @Override
     public OrderPlacementResponse placeOrder(OrderPlacementRequest orderPlacementRequest) {
         validateOrderPlacement(orderPlacementRequest);
         OrderPlacementEntity orderEntity = orderPlacementModelAdaptor.fromDto(orderPlacementRequest);
@@ -94,28 +116,6 @@ public class OrderServiceImpl implements OrderService {
         stringBuilder.append("Order Status : " + orderEntity.getOrderStatus());
         emailParam.setContent(stringBuilder.toString());
         emailService.sendEmail(emailParam);
-    }
-
-    @Transactional
-    @Override
-    public List<OrderDetail> viewOrders() {
-        return orderModelAdaptor.fromModelList(orderDao.loadOrders());
-    }
-
-    @Transactional
-    @Override
-    public Boolean updateOrderStatus(Long orderId, OrderStatus toOrderStatus) {
-        OrderPlacementEntity order = orderDao.loadOrder(orderId);
-        OrderStatus currentOrderStatus = order.getOrderStatus();
-        order.setOrderStatus(toOrderStatus);
-        orderDao.saveOrUpdateOrder(order);
-        addHistoryItem(order,currentOrderStatus, toOrderStatus);
-        EmailParam emailParam = new EmailParam();
-        emailParam.setSubject("Order Status Changed");
-        emailParam.setReceiverAddress(customerDao.loadCustomerById(order.getCustomerId()).getEmail());
-        emailParam.setContent("Your order status changed to " + toOrderStatus);
-        emailService.sendEmail(emailParam);
-        return Boolean.TRUE;
     }
 
     private void addHistoryItem(OrderPlacementEntity order,OrderStatus currentStatus, OrderStatus toOrderStatus) {
