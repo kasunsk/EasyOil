@@ -2,6 +2,9 @@ package com.oilseller.oilbrocker.order.service.impl;
 
 import com.oilseller.oilbrocker.email.dto.EmailParam;
 import com.oilseller.oilbrocker.email.service.EmailService;
+import com.oilseller.oilbrocker.history.dto.HistoryItem;
+import com.oilseller.oilbrocker.history.dto.HistoryType;
+import com.oilseller.oilbrocker.history.service.HistoryService;
 import com.oilseller.oilbrocker.order.adaptor.model.CustomerModelAdaptor;
 import com.oilseller.oilbrocker.order.adaptor.model.OrderDetailModelAdaptor;
 import com.oilseller.oilbrocker.order.adaptor.model.OrderPlacementEntityAdaptor;
@@ -25,6 +28,7 @@ public class OrderServiceImpl implements OrderService {
     private CustomerDao customerDao;
     private OrderDao orderDao;
     private EmailService emailService;
+    private HistoryService historyService;
     private SellingItemService sellingItemService;
     private CustomerModelAdaptor customerModelAdaptor = new CustomerModelAdaptor();
     private OrderPlacementEntityAdaptor orderPlacementModelAdaptor = new OrderPlacementEntityAdaptor();
@@ -32,11 +36,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     public OrderServiceImpl(CustomerDao customerDao, OrderDao orderDao ,SellingItemService sellingItemService,
-                            EmailService emailService) {
+                            EmailService emailService, HistoryService historyService) {
         this.customerDao = customerDao;
         this.sellingItemService = sellingItemService;
         this.orderDao = orderDao;
         this.emailService = emailService;
+        this.historyService = historyService;
     }
 
     @Transactional
@@ -61,11 +66,23 @@ public class OrderServiceImpl implements OrderService {
         orderEntity.setOrderStatus(OrderStatus.PLACED);
         orderDao.saveOrUpdateOrder(orderEntity);
 
+        addHistoryItem(orderPlacementRequest, orderEntity);
+
         sendEmail(orderPlacementRequest, orderEntity, orderReference);
         OrderPlacementResponse orderPlacementResponse = new OrderPlacementResponse();
         orderPlacementResponse.setOrderReference(orderReference);
         orderPlacementResponse.setOrderStatus(orderEntity.getOrderStatus());
         return orderPlacementResponse;
+    }
+
+    private void addHistoryItem(OrderPlacementRequest orderPlacementRequest, OrderPlacementEntity orderEntity) {
+        HistoryItem historyItem =new HistoryItem();
+        historyItem.setHistoryType(HistoryType.ORDER_CREATED);
+        historyItem.setOrderId(orderEntity.getOrderId());
+        historyItem.setSellingItemId(orderPlacementRequest.getOrderItemId());
+        historyItem.setUsername("SYSTEM");
+        historyItem.setUserNote("Order Created");
+        historyService.addHistoryItem(historyItem);
     }
 
     private void sendEmail(OrderPlacementRequest orderPlacementRequest, OrderPlacementEntity orderEntity, String orderReference) {
@@ -87,29 +104,41 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public Boolean updateOrderStatus(Long orderId, OrderStatus orderStatus) {
+    public Boolean updateOrderStatus(Long orderId, OrderStatus toOrderStatus) {
         OrderPlacementEntity order = orderDao.loadOrder(orderId);
-        order.setOrderStatus(orderStatus);
+        OrderStatus currentOrderStatus = order.getOrderStatus();
+        order.setOrderStatus(toOrderStatus);
         orderDao.saveOrUpdateOrder(order);
+        addHistoryItem(order,currentOrderStatus, toOrderStatus);
+        EmailParam emailParam = new EmailParam();
+        emailParam.setSubject("Order Status Changed");
+        emailParam.setReceiverAddress(customerDao.loadCustomerById(order.getCustomerId()).getEmail());
+        emailParam.setContent("Your order status changed to " + toOrderStatus);
+        emailService.sendEmail(emailParam);
         return Boolean.TRUE;
     }
 
-    private String generateOrderReference(OrderPlacementRequest orderPlacementRequest) {
+    private void addHistoryItem(OrderPlacementEntity order,OrderStatus currentStatus, OrderStatus toOrderStatus) {
+        HistoryItem historyItem = new HistoryItem();
+        historyItem.setHistoryType(HistoryType.ORDER_SC);
+        historyItem.setOrderId(order.getOrderId());
+        historyItem.setUsername("USER");
+        historyItem.setUserNote(order.getOrderItem());
+        historyItem.setFromStatus(currentStatus);
+        historyItem.setToStatus(toOrderStatus);
+        historyService.addHistoryItem(historyItem);
+    }
 
+    private String generateOrderReference(OrderPlacementRequest orderPlacementRequest) {
         String name = orderPlacementRequest.getCustomer().getCustomerName();
         String partOne = name.substring(0, 2);
-
         String currentTime = new Date().getTime() + "";
         String partThree = currentTime.substring(currentTime.length() - 2, currentTime.length());
-
         String address = orderPlacementRequest.getCustomer().getCustomerAddress();
         String partTwo = address.substring(0,2);
-
         String partFour = orderPlacementRequest.getOrderItemId() + "";
-
         String mobile = orderPlacementRequest.getCustomer().getMobileNumber();
         String partFive = mobile.substring(mobile.length()-3, mobile.length());
-
         String reference = partOne + partTwo + partThree + partFour + partFive;
         return reference.toLowerCase().trim();
     }
