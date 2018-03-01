@@ -53,6 +53,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
+    public Customer getCustomerDetails(Long customerId) {
+        return customerModelAdaptor.fromModel(customerDao.loadCustomerById(customerId));
+    }
+
+    @Transactional
+    @Override
     public List<OrderDetail> viewOrders() {
         return orderModelAdaptor.fromModelList(orderDao.loadOrders());
     }

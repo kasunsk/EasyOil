@@ -44,6 +44,11 @@ public class OrderController {
         return orderService.addCustomerDetails(customerParamAdaptor.fromParam(customerDetailsParam));
     }
 
+    @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.GET)
+    public CustomerDetailsParam getCustomerById(@PathVariable("customerId") Long customerId) {
+        return (customerParamAdaptor.fromDto(orderService.getCustomerDetails(customerId)));
+    }
+
     @RequestMapping(value = "", method = RequestMethod.GET)
     public List<OrderDetailParam> viewOrders() {
         return orderDetailParamAdaptor.fromDtoList(orderService.viewOrders());

@@ -8,6 +8,8 @@ public interface OrderService {
 
     Long addCustomerDetails(Customer customer);
 
+    Customer getCustomerDetails(Long customerId);
+
     OrderPlacementResponse placeOrder(OrderPlacementRequest orderPlacementRequest);
 
     List<OrderDetail> viewOrders();
