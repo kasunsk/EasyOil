@@ -11,4 +11,6 @@ public interface OrderService {
     OrderPlacementResponse placeOrder(OrderPlacementRequest orderPlacementRequest);
 
     List<OrderDetail> viewOrders();
+
+    Boolean updateOrderStatus(Long orderId, OrderStatus orderStatus);
 }

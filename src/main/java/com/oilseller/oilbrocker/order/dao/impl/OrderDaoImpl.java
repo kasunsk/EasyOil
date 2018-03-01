@@ -12,8 +12,8 @@ import java.util.List;
 public class OrderDaoImpl extends AbstractHibernateDao implements OrderDao{
 
     @Override
-    public void createOrder(OrderPlacementEntity placementEntity) {
-        getSession().save(placementEntity);
+    public void saveOrUpdateOrder(OrderPlacementEntity placementEntity) {
+        getSession().saveOrUpdate(placementEntity);
     }
 
     @Override
@@ -21,5 +21,10 @@ public class OrderDaoImpl extends AbstractHibernateDao implements OrderDao{
         String hql = "from OrderPlacementEntity";
         Query query = getSession().createQuery(hql);
         return query.list();
+    }
+
+    @Override
+    public OrderPlacementEntity loadOrder(Long orderId) {
+        return getSession().get(OrderPlacementEntity.class, orderId);
     }
 }

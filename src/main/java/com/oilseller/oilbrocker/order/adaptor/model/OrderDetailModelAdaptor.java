@@ -1,4 +1,4 @@
-package com.oilseller.oilbrocker.order.adaptor;
+package com.oilseller.oilbrocker.order.adaptor.model;
 
 import com.oilseller.oilbrocker.order.dto.OrderDetail;
 import com.oilseller.oilbrocker.order.entity.OrderPlacementEntity;

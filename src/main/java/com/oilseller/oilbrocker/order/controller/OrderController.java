@@ -1,15 +1,12 @@
 package com.oilseller.oilbrocker.order.controller;
 
-import com.oilseller.oilbrocker.order.adaptor.CustomerParamAdaptor;
-import com.oilseller.oilbrocker.order.adaptor.OrderDetailParamAdaptor;
-import com.oilseller.oilbrocker.order.adaptor.OrderPlacementRequestParamAdaptor;
-import com.oilseller.oilbrocker.order.adaptor.OrderPlacementResponseParamAdaptor;
+import com.oilseller.oilbrocker.order.adaptor.param.CustomerParamAdaptor;
+import com.oilseller.oilbrocker.order.adaptor.param.OrderDetailParamAdaptor;
+import com.oilseller.oilbrocker.order.adaptor.param.OrderPlacementRequestParamAdaptor;
+import com.oilseller.oilbrocker.order.adaptor.param.OrderPlacementResponseParamAdaptor;
 import com.oilseller.oilbrocker.order.dto.OrderPlacementRequest;
 import com.oilseller.oilbrocker.order.dto.OrderPlacementResponse;
-import com.oilseller.oilbrocker.order.param.CustomerDetailsParam;
-import com.oilseller.oilbrocker.order.param.OrderDetailParam;
-import com.oilseller.oilbrocker.order.param.OrderPlacementRequestParam;
-import com.oilseller.oilbrocker.order.param.OrderPlacementResponseParam;
+import com.oilseller.oilbrocker.order.param.*;
 import com.oilseller.oilbrocker.order.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,6 +48,11 @@ public class OrderController {
     @RequestMapping(value = "", method = RequestMethod.GET)
     public List<OrderDetailParam> viewOrders() {
         return orderDetailParamAdaptor.fromDtoList(orderService.viewOrders());
+    }
+
+    @RequestMapping(value = "/status/update", method = RequestMethod.POST)
+    public Boolean updateOrderStatus(@RequestBody OrderStatusUpdateRequest statusUpdateRequest) {
+        return orderService.updateOrderStatus(statusUpdateRequest.getOrderId(), statusUpdateRequest.getToOrderStatus());
     }
 
 }

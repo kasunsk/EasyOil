@@ -6,8 +6,10 @@ import java.util.List;
 
 public interface OrderDao {
 
-    void createOrder(OrderPlacementEntity placementEntity);
+    void saveOrUpdateOrder(OrderPlacementEntity placementEntity);
 
     List<OrderPlacementEntity> loadOrders();
+
+    OrderPlacementEntity loadOrder(Long id);
 
 }

@@ -1,4 +1,4 @@
-package com.oilseller.oilbrocker.order.adaptor;
+package com.oilseller.oilbrocker.order.adaptor.param;
 
 import com.oilseller.oilbrocker.order.dto.Customer;
 import com.oilseller.oilbrocker.order.param.CustomerDetailsParam;

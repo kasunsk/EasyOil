@@ -1,8 +1,8 @@
 package com.oilseller.oilbrocker.order.service.impl;
 
-import com.oilseller.oilbrocker.order.adaptor.CustomerModelAdaptor;
-import com.oilseller.oilbrocker.order.adaptor.OrderDetailModelAdaptor;
-import com.oilseller.oilbrocker.order.adaptor.OrderPlacementEntityAdaptor;
+import com.oilseller.oilbrocker.order.adaptor.model.CustomerModelAdaptor;
+import com.oilseller.oilbrocker.order.adaptor.model.OrderDetailModelAdaptor;
+import com.oilseller.oilbrocker.order.adaptor.model.OrderPlacementEntityAdaptor;
 import com.oilseller.oilbrocker.order.dao.CustomerDao;
 import com.oilseller.oilbrocker.order.dao.OrderDao;
 import com.oilseller.oilbrocker.order.dto.*;
@@ -54,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
         orderEntity.setCustomerId(customerId);
         orderEntity.setPaymentReference("COD");
         orderEntity.setOrderStatus(OrderStatus.PLACED);
-        orderDao.createOrder(orderEntity);
+        orderDao.saveOrUpdateOrder(orderEntity);
 
         OrderPlacementResponse orderPlacementResponse = new OrderPlacementResponse();
         orderPlacementResponse.setOrderReference(orderReference);
@@ -66,6 +66,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDetail> viewOrders() {
         return orderModelAdaptor.fromModelList(orderDao.loadOrders());
+    }
+
+    @Transactional
+    @Override
+    public Boolean updateOrderStatus(Long orderId, OrderStatus orderStatus) {
+        OrderPlacementEntity order = orderDao.loadOrder(orderId);
+        order.setOrderStatus(orderStatus);
+        orderDao.saveOrUpdateOrder(order);
+        return Boolean.TRUE;
     }
 
     private String generateOrderReference(OrderPlacementRequest orderPlacementRequest) {
