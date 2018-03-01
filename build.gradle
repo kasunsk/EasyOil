@@ -29,5 +29,6 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.modelmapper:modelmapper:' + modelMapperVersion)
 	compile('mysql:mysql-connector-java')
+	compile 'com.sun.mail:javax.mail:1.5.5'
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

@@ -1,5 +1,7 @@
 package com.oilseller.oilbrocker.order.service.impl;
 
+import com.oilseller.oilbrocker.email.dto.EmailParam;
+import com.oilseller.oilbrocker.email.service.EmailService;
 import com.oilseller.oilbrocker.order.adaptor.model.CustomerModelAdaptor;
 import com.oilseller.oilbrocker.order.adaptor.model.OrderDetailModelAdaptor;
 import com.oilseller.oilbrocker.order.adaptor.model.OrderPlacementEntityAdaptor;
@@ -22,16 +24,19 @@ public class OrderServiceImpl implements OrderService {
 
     private CustomerDao customerDao;
     private OrderDao orderDao;
+    private EmailService emailService;
     private SellingItemService sellingItemService;
     private CustomerModelAdaptor customerModelAdaptor = new CustomerModelAdaptor();
     private OrderPlacementEntityAdaptor orderPlacementModelAdaptor = new OrderPlacementEntityAdaptor();
     private OrderDetailModelAdaptor orderModelAdaptor = new OrderDetailModelAdaptor();
 
     @Autowired
-    public OrderServiceImpl(CustomerDao customerDao, OrderDao orderDao ,SellingItemService sellingItemService) {
+    public OrderServiceImpl(CustomerDao customerDao, OrderDao orderDao ,SellingItemService sellingItemService,
+                            EmailService emailService) {
         this.customerDao = customerDao;
         this.sellingItemService = sellingItemService;
         this.orderDao = orderDao;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -56,10 +61,22 @@ public class OrderServiceImpl implements OrderService {
         orderEntity.setOrderStatus(OrderStatus.PLACED);
         orderDao.saveOrUpdateOrder(orderEntity);
 
+        sendEmail(orderPlacementRequest, orderEntity, orderReference);
         OrderPlacementResponse orderPlacementResponse = new OrderPlacementResponse();
         orderPlacementResponse.setOrderReference(orderReference);
         orderPlacementResponse.setOrderStatus(orderEntity.getOrderStatus());
         return orderPlacementResponse;
+    }
+
+    private void sendEmail(OrderPlacementRequest orderPlacementRequest, OrderPlacementEntity orderEntity, String orderReference) {
+        EmailParam emailParam = new EmailParam();
+        emailParam.setSubject("Order Placed");
+        emailParam.setReceiverAddress(orderPlacementRequest.getCustomer().getEmail());
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Order Reference : " + orderReference);
+        stringBuilder.append("Order Status : " + orderEntity.getOrderStatus());
+        emailParam.setContent(stringBuilder.toString());
+        emailService.sendEmail(emailParam);
     }
 
     @Transactional
