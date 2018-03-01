@@ -1,20 +1,16 @@
 package com.oilseller.oilbrocker.order.controller;
 
-import com.oilseller.oilbrocker.order.adaptor.param.CustomerParamAdaptor;
-import com.oilseller.oilbrocker.order.adaptor.param.OrderDetailParamAdaptor;
-import com.oilseller.oilbrocker.order.adaptor.param.OrderPlacementRequestParamAdaptor;
-import com.oilseller.oilbrocker.order.adaptor.param.OrderPlacementResponseParamAdaptor;
+import com.oilseller.oilbrocker.history.service.HistoryService;
+import com.oilseller.oilbrocker.order.adaptor.param.*;
 import com.oilseller.oilbrocker.order.dto.OrderPlacementRequest;
 import com.oilseller.oilbrocker.order.dto.OrderPlacementResponse;
 import com.oilseller.oilbrocker.order.param.*;
 import com.oilseller.oilbrocker.order.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.PrimitiveIterator;
 
 
 @RestController
@@ -22,15 +18,18 @@ import java.util.List;
 public class OrderController {
 
     private OrderService orderService;
+    private HistoryService historyService;
     private CustomerParamAdaptor customerParamAdaptor = new CustomerParamAdaptor();
     private OrderPlacementRequestParamAdaptor orderPlacementParamAdaptor = new OrderPlacementRequestParamAdaptor();
     private OrderPlacementResponseParamAdaptor responseParamAdaptor = new OrderPlacementResponseParamAdaptor();
     private OrderDetailParamAdaptor orderDetailParamAdaptor = new OrderDetailParamAdaptor();
+    private OrderHistoryParamAdaptor historyParamAdaptor = new OrderHistoryParamAdaptor();
 
 
     @Autowired
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, HistoryService historyService) {
         this.orderService = orderService;
+        this.historyService =historyService;
     }
 
     @RequestMapping(value = "/place", method = RequestMethod.POST)
@@ -53,6 +52,11 @@ public class OrderController {
     @RequestMapping(value = "/status/update", method = RequestMethod.POST)
     public Boolean updateOrderStatus(@RequestBody OrderStatusUpdateRequest statusUpdateRequest) {
         return orderService.updateOrderStatus(statusUpdateRequest.getOrderId(), statusUpdateRequest.getToOrderStatus());
+    }
+
+    @RequestMapping(value = "/history/{orderId}", method = RequestMethod.GET)
+    public List<OrderHistoryParam> loadHistoryItemsByOrderId(@PathVariable("orderId") Long orderId) {
+        return historyParamAdaptor.fromDtoList(historyService.loadHistoryItemByOrderId(orderId));
     }
 
 }
