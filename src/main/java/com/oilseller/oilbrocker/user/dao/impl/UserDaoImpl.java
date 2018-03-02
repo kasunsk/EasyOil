@@ -6,6 +6,8 @@ import com.oilseller.oilbrocker.user.entity.UserModel;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository("userDao")
 public class UserDaoImpl extends AbstractHibernateDao implements UserDao {
 
@@ -26,5 +28,12 @@ public class UserDaoImpl extends AbstractHibernateDao implements UserDao {
         Query query = getSession().createQuery(hql);
         query.setParameter("username", username);
         return (UserModel) query.uniqueResult();
+    }
+
+    @Override
+    public List<UserModel> getAllUsers() {
+        String hql = "from UserModel";
+        Query query = getSession().createQuery(hql);
+        return query.list();
     }
 }

@@ -1,5 +1,6 @@
 package com.oilseller.oilbrocker.user.service.impl;
 
+import com.oilseller.oilbrocker.platform.exception.ServiceRuntimeException;
 import com.oilseller.oilbrocker.user.adaptor.UserModelAdaptor;
 import com.oilseller.oilbrocker.user.dao.UserDao;
 import com.oilseller.oilbrocker.user.dto.User;
@@ -8,6 +9,8 @@ import com.oilseller.oilbrocker.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
@@ -26,6 +29,10 @@ public class UserServiceImpl implements UserService {
     public Long addUser(User user) {
 
         UserModel userModel = userDao.getUserByUsername(user.getUsername());
+
+        if (userModel.getUsername().equals(user.getUsername())) {
+            throw new ServiceRuntimeException("ALREADY_EXIST","Username already exist");
+        }
         return userDao.addUser(userModelAdaptor.fromDto(user));
     }
 
@@ -39,5 +46,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User loadUserById(Long userId) {
         return userModelAdaptor.fromModel(userDao.getUserById(userId));
+    }
+
+    @Transactional
+    @Override
+    public List<User> loadAllUsers() {
+        return userModelAdaptor.fromModelList(userDao.getAllUsers());
     }
 }

@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -25,5 +27,10 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST)
     public Long addUser(@RequestBody UserParam userParam) {
         return userService.addUser(userParamAdaptor.fromParam(userParam));
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public List<UserParam> loadAllUsers() {
+        return userParamAdaptor.fromDtoList(userService.loadAllUsers());
     }
 }
