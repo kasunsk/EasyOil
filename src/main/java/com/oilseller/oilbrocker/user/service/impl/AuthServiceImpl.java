@@ -10,6 +10,9 @@ import com.oilseller.oilbrocker.user.entity.UserModel;
 import com.oilseller.oilbrocker.user.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 @Service("authService")
 public class AuthServiceImpl implements AuthService {
@@ -28,6 +31,7 @@ public class AuthServiceImpl implements AuthService {
         return Boolean.TRUE;
     }
 
+    @Transactional
     @Override
     public LoginResponse login(String username, String password) {
 
@@ -41,10 +45,19 @@ public class AuthServiceImpl implements AuthService {
 
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setUser(user);
-
+        String userToken = generateUserToken(user);
+        loginResponse.setToken(userToken);
         return loginResponse;
     }
 
+    private String generateUserToken(User user) {
+        String partOne = user.getUsername();
+        String partTwo = new Date().getTime() + "";
+        String partThree = user.getCreatedDate().getTime() + "";
+        return partOne + partTwo + partThree;
+    }
+
+    @Transactional
     @Override
     public Boolean logout() {
         return null;
