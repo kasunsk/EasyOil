@@ -1,4 +1,4 @@
-package com.oilseller.oilbrocker.platform;
+package com.oilseller.oilbrocker.platform.exception;
 
 public class ServiceRuntimeException extends RuntimeException {
 

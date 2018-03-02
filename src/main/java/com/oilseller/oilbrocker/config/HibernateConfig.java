@@ -24,7 +24,7 @@ public class HibernateConfig {
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan("com.oilseller.oilbrocker.sellingItem.entity", "com.oilseller.oilbrocker.order.entity", "com.oilseller.oilbrocker.order.entity", "com.oilseller.oilbrocker.history.model");
+        sessionFactory.setPackagesToScan("com.oilseller.oilbrocker.sellingItem.entity", "com.oilseller.oilbrocker.order.entity", "com.oilseller.oilbrocker.order.entity", "com.oilseller.oilbrocker.history.model", "com.oilseller.oilbrocker.user.entity");
         sessionFactory.setHibernateProperties(hibernateProperties());
         return sessionFactory;
     }

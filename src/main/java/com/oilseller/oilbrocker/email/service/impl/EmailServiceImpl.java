@@ -2,7 +2,7 @@ package com.oilseller.oilbrocker.email.service.impl;
 
 import com.oilseller.oilbrocker.email.dto.EmailParam;
 import com.oilseller.oilbrocker.email.service.EmailService;
-import com.oilseller.oilbrocker.platform.ServiceRuntimeException;
+import com.oilseller.oilbrocker.platform.exception.ServiceRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
@@ -68,7 +68,7 @@ public class EmailServiceImpl implements EmailService {
         props.put("mail.smtp.host", environment.getRequiredProperty("email.smtp.server"));
         props.put("mail.smtp.port", environment.getRequiredProperty("email.server.port"));
         props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.user", "true");
         props.put("mail.smtp.socketFactory.port", environment.getRequiredProperty("email.server.port"));
         props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         return props;
