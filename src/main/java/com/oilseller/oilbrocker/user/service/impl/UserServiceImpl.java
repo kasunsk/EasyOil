@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
 
         UserModel userModel = userDao.getUserByUsername(user.getUsername());
 
-        if (userModel.getUsername().equals(user.getUsername())) {
+        if (userModel != null) {
             throw new ServiceRuntimeException(ErrorCode.ALREADY_EXIST,"Username already exist");
         }
         return userDao.addUser(userModelAdaptor.fromDto(user));

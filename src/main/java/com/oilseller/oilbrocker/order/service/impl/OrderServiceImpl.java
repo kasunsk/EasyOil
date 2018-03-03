@@ -13,6 +13,7 @@ import com.oilseller.oilbrocker.order.dao.OrderDao;
 import com.oilseller.oilbrocker.order.dto.*;
 import com.oilseller.oilbrocker.order.entity.OrderPlacementEntity;
 import com.oilseller.oilbrocker.order.service.OrderService;
+import com.oilseller.oilbrocker.platform.thread.ThreadLocalContext;
 import com.oilseller.oilbrocker.sellingItem.dto.SellingItem;
 import com.oilseller.oilbrocker.sellingItem.service.SellingItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,11 +105,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void addHistoryItem(OrderPlacementRequest orderPlacementRequest, OrderPlacementEntity orderEntity) {
-        HistoryItem historyItem =new HistoryItem();
+        HistoryItem historyItem = new HistoryItem();
         historyItem.setHistoryType(HistoryType.ORDER_CREATED);
         historyItem.setOrderId(orderEntity.getOrderId());
         historyItem.setSellingItemId(orderPlacementRequest.getOrderItemId());
-        historyItem.setUsername("SYSTEM");
+        historyItem.setUsername("CUSTOMER");
         historyItem.setUserNote("Order Created");
         historyService.addHistoryItem(historyItem);
     }
@@ -128,7 +129,7 @@ public class OrderServiceImpl implements OrderService {
         HistoryItem historyItem = new HistoryItem();
         historyItem.setHistoryType(HistoryType.ORDER_SC);
         historyItem.setOrderId(order.getOrderId());
-        historyItem.setUsername("USER");
+        historyItem.setUsername(ThreadLocalContext.getUser());
         historyItem.setUserNote(order.getOrderItem());
         historyItem.setFromStatus(currentStatus);
         historyItem.setToStatus(toOrderStatus);
