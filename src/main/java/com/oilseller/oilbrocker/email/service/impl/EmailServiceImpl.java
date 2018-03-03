@@ -2,7 +2,6 @@ package com.oilseller.oilbrocker.email.service.impl;
 
 import com.oilseller.oilbrocker.email.dto.EmailParam;
 import com.oilseller.oilbrocker.email.service.EmailService;
-import com.oilseller.oilbrocker.platform.exception.ServiceRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

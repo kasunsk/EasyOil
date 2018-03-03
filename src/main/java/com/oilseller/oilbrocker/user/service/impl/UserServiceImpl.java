@@ -1,6 +1,7 @@
 package com.oilseller.oilbrocker.user.service.impl;
 
-import com.oilseller.oilbrocker.platform.exception.ServiceRuntimeException;
+import com.oilseller.oilbrocker.platform.exception.dto.ErrorCode;
+import com.oilseller.oilbrocker.platform.exception.dto.ServiceRuntimeException;
 import com.oilseller.oilbrocker.user.adaptor.UserModelAdaptor;
 import com.oilseller.oilbrocker.user.dao.UserDao;
 import com.oilseller.oilbrocker.user.dto.User;
@@ -31,7 +32,7 @@ public class UserServiceImpl implements UserService {
         UserModel userModel = userDao.getUserByUsername(user.getUsername());
 
         if (userModel.getUsername().equals(user.getUsername())) {
-            throw new ServiceRuntimeException("ALREADY_EXIST","Username already exist");
+            throw new ServiceRuntimeException(ErrorCode.ALREADY_EXIST,"Username already exist");
         }
         return userDao.addUser(userModelAdaptor.fromDto(user));
     }

@@ -1,7 +1,8 @@
 package com.oilseller.oilbrocker.platform.interceptor;
 
 
-import com.oilseller.oilbrocker.platform.exception.ServiceRuntimeException;
+import com.oilseller.oilbrocker.platform.exception.dto.ErrorCode;
+import com.oilseller.oilbrocker.platform.exception.dto.ServiceRuntimeException;
 import com.oilseller.oilbrocker.user.service.AuthService;
 import com.oilseller.oilbrocker.user.service.TokenService;
 import org.slf4j.Logger;
@@ -41,7 +42,7 @@ public class RequestValidationInterceptor implements HandlerInterceptor {
             validateUserToken(userToken);
             if (!authService.validateUserToken(userToken)) {
                 log.error("Authentication fail for {} in user {} ", methodName, "user");
-                throw new ServiceRuntimeException("Auth Error", "Authentication fail");
+                throw new ServiceRuntimeException(ErrorCode.AUTH_ERROR, "Authentication fail");
             }
         }
         return true;
@@ -55,7 +56,7 @@ public class RequestValidationInterceptor implements HandlerInterceptor {
 
     private void validateUserToken(String userToken) {
         if (!tokenService.isValidRequest(userToken)) {
-            throw new ServiceRuntimeException("INVALID_TOKEN", "Invalid Token");
+            throw new ServiceRuntimeException(ErrorCode.AUTH_ERROR, "Invalid Token");
         }
     }
 
