@@ -2,6 +2,7 @@ package com.oilseller.oilbrocker.sellingItem.dao.impl;
 
 import com.oilseller.oilbrocker.platform.dao.AbstractHibernateDao;
 import com.oilseller.oilbrocker.sellingItem.dao.SellingItemDao;
+import com.oilseller.oilbrocker.sellingItem.dto.SellingItem;
 import com.oilseller.oilbrocker.sellingItem.entity.SellingItemEntity;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,12 @@ public class SellingItemDaoImpl extends AbstractHibernateDao implements SellingI
     public Long addSellingItem(SellingItemEntity sellingItemEntity) {
         getSession().save(sellingItemEntity);
         return sellingItemEntity.getId();
+    }
+
+    @Override
+    public SellingItemEntity updateSellingItem(SellingItemEntity sellingItemEntity) {
+        getSession().update(sellingItemEntity);
+        return sellingItemEntity;
     }
 
     @Override

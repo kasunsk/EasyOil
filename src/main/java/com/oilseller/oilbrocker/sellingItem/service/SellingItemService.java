@@ -13,5 +13,9 @@ public interface SellingItemService {
 
     Long addSellingItem(SellingItem sellingItem);
 
+    SellingItem updateSellingItem(SellingItem sellingItem);
+
+    Boolean reduceSellingItemAmount(Long itemId, Long reduceAmount);
+
     SellingItem loadSellingItem(Long orderItem);
 }

@@ -13,9 +13,13 @@ import com.oilseller.oilbrocker.order.dao.OrderDao;
 import com.oilseller.oilbrocker.order.dto.*;
 import com.oilseller.oilbrocker.order.entity.OrderPlacementEntity;
 import com.oilseller.oilbrocker.order.service.OrderService;
+import com.oilseller.oilbrocker.platform.exception.dto.ErrorCode;
+import com.oilseller.oilbrocker.platform.exception.dto.ServiceRuntimeException;
 import com.oilseller.oilbrocker.platform.thread.ThreadLocalContext;
 import com.oilseller.oilbrocker.sellingItem.dto.SellingItem;
 import com.oilseller.oilbrocker.sellingItem.service.SellingItemService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +29,8 @@ import java.util.List;
 
 @Service("orderService")
 public class OrderServiceImpl implements OrderService {
+
+    private static final Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     private CustomerDao customerDao;
     private OrderDao orderDao;
@@ -84,6 +90,8 @@ public class OrderServiceImpl implements OrderService {
         String orderReference = generateOrderReference(orderPlacementRequest);
         orderEntity.setOrderReference(orderReference);
         SellingItem sellingItem = sellingItemService.loadSellingItem(orderPlacementRequest.getOrderItemId());
+        sellingItemService.reduceSellingItemAmount(sellingItem.getId(), orderPlacementRequest.getAmount());
+
         orderEntity.setOrderItem(sellingItem.getSellingItem());
         Long customerId = customerDao.addCustomer(customerModelAdaptor.fromDto(orderPlacementRequest.getCustomer()));
         orderEntity.setCustomerId(customerId);

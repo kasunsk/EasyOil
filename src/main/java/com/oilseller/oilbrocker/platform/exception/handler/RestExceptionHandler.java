@@ -44,6 +44,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 apiError = new ApiError(HttpStatus.ALREADY_REPORTED);
                 apiError.setMessage(ex.getMessage());
                 break;
+            case ErrorCode.INVALID_INPUT:
+                apiError = new ApiError(HttpStatus.BAD_REQUEST);
+                apiError.setMessage(ex.getMessage());
+                break;
             default:
                 apiError = new ApiError(HttpStatus.NOT_ACCEPTABLE, ex.getMessage(), ex);
                 break;

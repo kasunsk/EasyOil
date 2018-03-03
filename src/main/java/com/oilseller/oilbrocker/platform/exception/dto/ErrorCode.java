@@ -12,5 +12,7 @@ public interface ErrorCode {
 
     String ALREADY_EXIST ="Resource Already Exist.";
 
+    String INVALID_INPUT ="Input is Invalid";
+
 
 }

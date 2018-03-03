@@ -13,5 +13,7 @@ public interface SellingItemDao {
 
     Long addSellingItem(SellingItemEntity sellingItemEntity);
 
+    SellingItemEntity updateSellingItem(SellingItemEntity sellingItemEntity);
+
     SellingItemEntity loadSellingItem(Long orderItemId);
 }
