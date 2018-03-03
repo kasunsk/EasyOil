@@ -60,7 +60,7 @@ public class SellingItemServiceImpl implements SellingItemService {
 
         if (reduceAmount > availableAmount) {
             log.error("User requested items than available");
-            throw new ServiceRuntimeException(ErrorCode.INVALID_INPUT, "Max " + availableAmount + "Items Only");
+            throw new ServiceRuntimeException(ErrorCode.INVALID_INPUT, "Max " + availableAmount + " Items Only");
         }
         Long newAmount = availableAmount - reduceAmount;
         sellingItem.setAvailableAmount(newAmount);
