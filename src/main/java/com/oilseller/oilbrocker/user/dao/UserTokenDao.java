@@ -8,4 +8,6 @@ public interface UserTokenDao {
 
     Boolean isValidToken(String userToken);
 
+    UserTokenModel getUserTokenEntity(String userToken);
+
 }

@@ -34,4 +34,13 @@ public class UserTokenDaoImpl extends AbstractHibernateDao implements UserTokenD
         getSession().update(userTokenModel);
         return Boolean.TRUE;
     }
+
+    @Override
+    public UserTokenModel getUserTokenEntity(String userToken) {
+
+        String hql = "from UserTokenModel ut where ut.userToken =:userToken";
+        Query query = getSession().createQuery(hql);
+        query.setParameter("userToken", userToken);
+        return (UserTokenModel) query.uniqueResult();
+    }
 }

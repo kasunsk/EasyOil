@@ -4,6 +4,7 @@ import com.oilseller.oilbrocker.history.adaptor.HistoryItemModelAdaptor;
 import com.oilseller.oilbrocker.history.dao.HistoryDao;
 import com.oilseller.oilbrocker.history.dto.HistoryItem;
 import com.oilseller.oilbrocker.history.service.HistoryService;
+import com.oilseller.oilbrocker.platform.thread.ThreadLocalContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

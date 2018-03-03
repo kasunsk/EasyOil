@@ -2,6 +2,7 @@ package com.oilseller.oilbrocker.platform.interceptor;
 
 import com.oilseller.oilbrocker.platform.dto.Context;
 import com.oilseller.oilbrocker.platform.thread.ThreadLocalContext;
+import com.oilseller.oilbrocker.user.service.TokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -18,10 +19,15 @@ public class UserInterceptor implements HandlerInterceptor {
 
     private static final Logger log = LoggerFactory.getLogger(UserInterceptor.class);
 
+    private TokenService tokenService;
+
+    public UserInterceptor(TokenService tokenService) {
+        this.tokenService = tokenService;
+    }
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if(!(request.getRequestURI().contains("login") || request.getRequestURI().contains("error")
-                || request.getMethod().equals(OPTIONS.toString()))) {
+        if(isaAuthenticateRequired(request)) {
             String token = request.getHeader("token");
             String username = getUsername(token);
             log.info("Request by user : {}", username);
@@ -32,13 +38,19 @@ public class UserInterceptor implements HandlerInterceptor {
         return true;
     }
 
+    private boolean isaAuthenticateRequired(HttpServletRequest request) {
+        return !(request.getRequestURI().contains("login") || request.getRequestURI().contains("error")
+                || request.getMethod().equals(OPTIONS.toString()) || request.getRequestURI().contains("order/place")
+                || request.getRequestURI().contains("sellitem/list"));
+    }
+
     private String getUsername(String token) {
-        return "USER";
+        return tokenService.getUsername(token);
     }
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-
+        ThreadLocalContext.clear();
     }
 
     @Override

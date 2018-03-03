@@ -45,6 +45,14 @@ public class TokenServiceImpl implements TokenService {
         return userTokenDao.isValidToken(userToken);
     }
 
+    @Transactional
+    @Override
+    public String getUsername(String userToken) {
+
+        UserTokenModel tokenModel = userTokenDao.getUserTokenEntity(userToken);
+        return tokenModel.getUsername();
+    }
+
     private String generateUserToken(UserModel user) {
 
         String partOne = user.getUsername();
