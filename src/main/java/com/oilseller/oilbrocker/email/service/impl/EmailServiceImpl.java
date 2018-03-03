@@ -3,6 +3,8 @@ package com.oilseller.oilbrocker.email.service.impl;
 import com.oilseller.oilbrocker.email.dto.EmailParam;
 import com.oilseller.oilbrocker.email.service.EmailService;
 import com.oilseller.oilbrocker.platform.exception.ServiceRuntimeException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
@@ -17,6 +19,8 @@ import javax.mail.internet.MimeMessage;
 
 @Service("emailService")
 public class EmailServiceImpl implements EmailService {
+
+    private static final Logger log = LoggerFactory.getLogger(EmailServiceImpl.class);
 
     private Environment environment;
 
@@ -45,7 +49,8 @@ public class EmailServiceImpl implements EmailService {
                     session);
             Transport.send(emailMessage);
         } catch (Exception ex) {
-            throw new ServiceRuntimeException("EMAIL_SENDING_FAIL", ex.getMessage());
+            log.error("Unable to send email to {}, Error occured while sending email {}", emailParam.getReceiverAddress(), ex.getMessage());
+            return Boolean.FALSE;
         }
 
         return Boolean.TRUE;

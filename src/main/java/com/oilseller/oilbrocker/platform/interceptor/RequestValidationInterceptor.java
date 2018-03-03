@@ -1,8 +1,9 @@
 package com.oilseller.oilbrocker.platform.interceptor;
 
 
-import com.oilseller.oilbrocker.user.service.AuthService;
 import com.oilseller.oilbrocker.platform.exception.ServiceRuntimeException;
+import com.oilseller.oilbrocker.user.service.AuthService;
+import com.oilseller.oilbrocker.user.service.TokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,25 +21,27 @@ import static org.springframework.http.HttpMethod.OPTIONS;
 @Component
 public class RequestValidationInterceptor implements HandlerInterceptor {
 
+    private static final Logger log = LoggerFactory.getLogger(RequestValidationInterceptor.class);
     private AuthService authService;
+    private TokenService tokenService;
 
     @Autowired
-    public RequestValidationInterceptor(AuthService authService) {
+    public RequestValidationInterceptor(TokenService tokenService, AuthService authService) {
+        this.tokenService = tokenService;
         this.authService = authService;
     }
-
-    private static final Logger log = LoggerFactory.getLogger(RequestValidationInterceptor.class);
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (!(request.getRequestURI().contains("login") || request.getRequestURI().contains("error")
-                || request.getMethod().equals(OPTIONS.toString()))) {
+                || request.getMethod().equals(OPTIONS.toString()) || request.getRequestURI().contains("order/place")
+                || request.getRequestURI().contains("sellitem/list"))) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             Method methodName = handlerMethod.getMethod();
             log.info("Handler method : {} ", methodName.getName());
             String userToken = request.getHeader("token");
             validateUserToken(userToken);
-            if(!authService.validateUserToken(userToken)) {
+            if (!authService.validateUserToken(userToken)) {
                 log.error("Authentication fail for {} in user {} ", methodName, "user");
                 throw new ServiceRuntimeException("Auth Error", "Authentication fail");
             }
@@ -47,7 +50,9 @@ public class RequestValidationInterceptor implements HandlerInterceptor {
     }
 
     private void validateUserToken(String userToken) {
-
+        if (!tokenService.isValidRequest(userToken)) {
+            throw new ServiceRuntimeException("INVALID_TOKEN", "Invalid Token");
+        }
     }
 
     @Override
