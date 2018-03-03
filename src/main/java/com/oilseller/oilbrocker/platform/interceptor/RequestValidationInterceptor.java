@@ -33,9 +33,7 @@ public class RequestValidationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (!(request.getRequestURI().contains("login") || request.getRequestURI().contains("error")
-                || request.getMethod().equals(OPTIONS.toString()) || request.getRequestURI().contains("order/place")
-                || request.getRequestURI().contains("sellitem/list"))) {
+        if (isaAuthenticateRequired(request)) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             Method methodName = handlerMethod.getMethod();
             log.info("Handler method : {} ", methodName.getName());
@@ -47,6 +45,12 @@ public class RequestValidationInterceptor implements HandlerInterceptor {
             }
         }
         return true;
+    }
+
+    private boolean isaAuthenticateRequired(HttpServletRequest request) {
+        return !(request.getRequestURI().contains("login") || request.getRequestURI().contains("error")
+                || request.getMethod().equals(OPTIONS.toString()) || request.getRequestURI().contains("order/place")
+                || request.getRequestURI().contains("sellitem/list"));
     }
 
     private void validateUserToken(String userToken) {
