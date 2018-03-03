@@ -1,0 +1,8 @@
+package com.oilseller.oilbrocker.user.service;
+
+public interface TokenService {
+
+    String addUserToken(String username);
+
+    Boolean isValidRequest(String userToken);
+}
