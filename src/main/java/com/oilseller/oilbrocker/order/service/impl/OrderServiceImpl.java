@@ -72,11 +72,7 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderStatus(toOrderStatus);
         orderDao.saveOrUpdateOrder(order);
         addHistoryItem(order,currentOrderStatus, toOrderStatus);
-        EmailParam emailParam = new EmailParam();
-        emailParam.setSubject("Order Status Changed");
-        emailParam.setReceiverAddress(customerDao.loadCustomerById(order.getCustomerId()).getEmail());
-        emailParam.setContent("Your order status changed to " + toOrderStatus);
-        emailService.sendEmail(emailParam);
+        sendOrderStatusUpdateEmail(toOrderStatus, order);
         return Boolean.TRUE;
     }
 
@@ -94,14 +90,20 @@ public class OrderServiceImpl implements OrderService {
         orderEntity.setPaymentReference("COD");
         orderEntity.setOrderStatus(OrderStatus.PLACED);
         orderDao.saveOrUpdateOrder(orderEntity);
-
         addHistoryItem(orderPlacementRequest, orderEntity);
-
-        sendEmail(orderPlacementRequest, orderEntity, orderReference);
+        sendOrderCreateEmail(orderPlacementRequest, orderEntity, orderReference);
         OrderPlacementResponse orderPlacementResponse = new OrderPlacementResponse();
         orderPlacementResponse.setOrderReference(orderReference);
         orderPlacementResponse.setOrderStatus(orderEntity.getOrderStatus());
         return orderPlacementResponse;
+    }
+
+    private void sendOrderStatusUpdateEmail(OrderStatus toOrderStatus, OrderPlacementEntity order) {
+        EmailParam emailParam = new EmailParam();
+        emailParam.setSubject("Order Status Changed");
+        emailParam.setReceiverAddress(customerDao.loadCustomerById(order.getCustomerId()).getEmail());
+        emailParam.setContent(" Your order status changed to " + toOrderStatus);
+        emailService.sendEmail(emailParam);
     }
 
     private void addHistoryItem(OrderPlacementRequest orderPlacementRequest, OrderPlacementEntity orderEntity) {
@@ -114,13 +116,13 @@ public class OrderServiceImpl implements OrderService {
         historyService.addHistoryItem(historyItem);
     }
 
-    private void sendEmail(OrderPlacementRequest orderPlacementRequest, OrderPlacementEntity orderEntity, String orderReference) {
+    private void sendOrderCreateEmail(OrderPlacementRequest orderPlacementRequest, OrderPlacementEntity orderEntity, String orderReference) {
         EmailParam emailParam = new EmailParam();
         emailParam.setSubject("Order Placed");
         emailParam.setReceiverAddress(orderPlacementRequest.getCustomer().getEmail());
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Order Reference : " + orderReference);
-        stringBuilder.append("Order Status : " + orderEntity.getOrderStatus());
+        stringBuilder.append(" Order Status : " + orderEntity.getOrderStatus());
         emailParam.setContent(stringBuilder.toString());
         emailService.sendEmail(emailParam);
     }
