@@ -14,8 +14,8 @@ public class OrderDaoImpl extends AbstractHibernateDao implements OrderDao {
 
     @Override
     public void saveOrUpdateOrder(OrderPlacementEntity placementEntity) {
-//        getSession().saveOrUpdate(placementEntity);
-        throw new RuntimeException("Order_Placement_Error");
+        getSession().saveOrUpdate(placementEntity);
+//        throw new RuntimeException("Order_Placement_Error");
     }
 
     @Override
