@@ -6,9 +6,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = {"com.oilseller.oilbrocker.sellingItem.dao", "com.oilseller.oilbrocker.user.dao", "com.oilseller.oilbrocker.order.dao", "com.oilseller.oilbrocker.history.dao"})
-public class OilbrockerApplication {
+public class EasyOilApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OilbrockerApplication.class, args);
+		SpringApplication.run(EasyOilApplication.class, args);
 	}
 }

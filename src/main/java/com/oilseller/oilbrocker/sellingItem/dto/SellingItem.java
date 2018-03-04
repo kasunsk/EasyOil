@@ -14,7 +14,7 @@ public class SellingItem {
     private String description;
     private Long price;
     private String currency;
-    private String status;
+    private SellingItemStatus status;
     private String image;
     private Date validTo;
     private Date createdDate;
@@ -77,11 +77,11 @@ public class SellingItem {
         this.currency = currency;
     }
 
-    public String getStatus() {
+    public SellingItemStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(SellingItemStatus status) {
         this.status = status;
     }
 

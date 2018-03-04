@@ -13,6 +13,8 @@ import com.oilseller.oilbrocker.order.dao.OrderDao;
 import com.oilseller.oilbrocker.order.dto.*;
 import com.oilseller.oilbrocker.order.entity.OrderPlacementEntity;
 import com.oilseller.oilbrocker.order.service.OrderService;
+import com.oilseller.oilbrocker.platform.exception.dto.ErrorCode;
+import com.oilseller.oilbrocker.platform.exception.dto.ServiceRuntimeException;
 import com.oilseller.oilbrocker.platform.thread.ThreadLocalContext;
 import com.oilseller.oilbrocker.sellingItem.dto.SellingItem;
 import com.oilseller.oilbrocker.sellingItem.service.SellingItemService;
@@ -25,6 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+
+import static com.oilseller.oilbrocker.platform.util.ValidationUtil.validate;
 
 @Service("orderService")
 public class OrderServiceImpl implements OrderService {
@@ -73,7 +77,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Boolean updateOrderStatus(Long orderId, OrderStatus toOrderStatus) {
         OrderPlacementEntity order = orderDao.findOne(orderId);
+
+        if (order == null) {
+            throw new ServiceRuntimeException(ErrorCode.NOT_FOUND, "Order not found");
+        }
         OrderStatus currentOrderStatus = order.getOrderStatus();
+
+        if (currentOrderStatus.equals(toOrderStatus)) {
+            throw new ServiceRuntimeException(ErrorCode.INVALID_INPUT, "Order status are same");
+        }
         order.setOrderStatus(toOrderStatus);
         orderDao.save(order);
         addHistoryItem(order,currentOrderStatus, toOrderStatus);
@@ -161,9 +173,24 @@ public class OrderServiceImpl implements OrderService {
 
     private void validateOrderPlacement(OrderPlacementRequest orderPlacementRequest) {
 
+        validate(orderPlacementRequest, "Invalid order request");
+        validateCustomer(orderPlacementRequest.getCustomer());
+        validate(orderPlacementRequest.getAmount(), "Amount is empty");
+        validate(orderPlacementRequest.getOrderItemId(), "Order Item id is null");
+        validate(orderPlacementRequest.getCurrency(), "Currency is empty");
+        validate(orderPlacementRequest.getPrice(), "Price is empty");
+//        validate(orderPlacementRequest.getPaymentStatus(), "Payment status can not be empty");
+
+        if (orderPlacementRequest.getPaymentStatus() == null) {
+            orderPlacementRequest.setPaymentStatus(PaymentStatus.WAITING);
+        }
     }
 
     private void validateCustomer(Customer customer) {
-
+        validate(customer, "Customer data can not be null");
+        validate(customer.getCustomerName(), "Customer name is empty");
+        validate(customer.getCustomerAddress(), "Customer address is empty");
+        validate(customer.getMobileNumber(), "Customer mobile number is empty");
+//        validate(customer.getEmail(), "Customer email is empty");
     }
 }

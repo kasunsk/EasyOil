@@ -5,6 +5,7 @@ import com.oilseller.oilbrocker.platform.exception.dto.ServiceRuntimeException;
 import com.oilseller.oilbrocker.sellingItem.adaptor.SellingItemAdaptor;
 import com.oilseller.oilbrocker.sellingItem.dao.SellingItemDao;
 import com.oilseller.oilbrocker.sellingItem.dto.SellingItem;
+import com.oilseller.oilbrocker.sellingItem.dto.SellingItemStatus;
 import com.oilseller.oilbrocker.sellingItem.entity.SellingItemEntity;
 import com.oilseller.oilbrocker.sellingItem.service.SellingItemService;
 import org.slf4j.Logger;
@@ -15,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
+
+import static com.oilseller.oilbrocker.platform.util.ValidationUtil.validate;
 
 /**
  * Created by kasun on 2/21/18.
@@ -101,16 +104,20 @@ public class SellingItemServiceImpl implements SellingItemService {
 
     private void validateSellingItem(SellingItem sellingItem, String requestType) {
 
-        if (sellingItem == null) {
-            throw new ServiceRuntimeException(ErrorCode.INVALID_INPUT, "selling item is null");
+        validate(sellingItem, "selling item is null");
+        if (requestType.equals(UPDATE)) {
+            validate(sellingItem.getId(), "selling item id is required");
         }
+        validate(sellingItem.getItemReference(), "selling item reference is required");
+        validate(sellingItem.getSellingItem(), "Selling item name is empty");
+        validate(sellingItem.getAvailableAmount(), "Available amount is empty");
+        validate(sellingItem.getPrice(), "Item price is empty");
+        validate(sellingItem.getCurrency(), "Currency is empty");
+        validate(sellingItem.getImage(), "Image url is empty");
+        validate(sellingItem.getValidTo(), "Valid to date is empty");
 
-        if (requestType.equals(UPDATE) && sellingItem.getId() == null) {
-            throw new ServiceRuntimeException(ErrorCode.INVALID_INPUT, "selling item id is required");
-        }
-
-        if (sellingItem.getItemReference() == null || sellingItem.getItemReference().isEmpty()){
-            throw new ServiceRuntimeException(ErrorCode.INVALID_INPUT, "selling item reference is required");
+        if (sellingItem.getStatus() == null) {
+            sellingItem.setStatus(SellingItemStatus.AVAILABLE);
         }
     }
 }

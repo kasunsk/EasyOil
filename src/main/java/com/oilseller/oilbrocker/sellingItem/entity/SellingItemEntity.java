@@ -1,6 +1,7 @@
 package com.oilseller.oilbrocker.sellingItem.entity;
 
 import com.oilseller.oilbrocker.platform.entity.AbstractTrackableEntity;
+import com.oilseller.oilbrocker.sellingItem.dto.SellingItemStatus;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -29,8 +30,9 @@ public class SellingItemEntity extends AbstractTrackableEntity {
     @Column(name = "DESCRIPTION", nullable = false)
     private String description;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "STATUS", nullable = false)
-    private String status;
+    private SellingItemStatus status;
 
     @Column(name = "PRICE", nullable = false)
     private Long price;
