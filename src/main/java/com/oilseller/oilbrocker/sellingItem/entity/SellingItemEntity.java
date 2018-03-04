@@ -87,11 +87,11 @@ public class SellingItemEntity extends AbstractTrackableEntity {
         this.description = description;
     }
 
-    public String getStatus() {
+    public SellingItemStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(SellingItemStatus status) {
         this.status = status;
     }
 

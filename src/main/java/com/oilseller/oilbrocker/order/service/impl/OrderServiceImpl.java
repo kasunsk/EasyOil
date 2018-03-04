@@ -97,10 +97,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderPlacementResponse placeOrder(OrderPlacementRequest orderPlacementRequest) {
         validateOrderPlacement(orderPlacementRequest);
+        SellingItem sellingItem = sellingItemService.loadSellingItem(orderPlacementRequest.getOrderItemId());
+        validateSubmittedPrice(orderPlacementRequest, sellingItem);
         OrderPlacementEntity orderEntity = orderPlacementModelAdaptor.fromDto(orderPlacementRequest);
         String orderReference = generateOrderReference(orderPlacementRequest);
         orderEntity.setOrderReference(orderReference);
-        SellingItem sellingItem = sellingItemService.loadSellingItem(orderPlacementRequest.getOrderItemId());
         sellingItemService.reduceSellingItemAmount(sellingItem.getId(), orderPlacementRequest.getAmount());
 
         orderEntity.setOrderItem(sellingItem.getSellingItem());
@@ -115,6 +116,20 @@ public class OrderServiceImpl implements OrderService {
         orderPlacementResponse.setOrderReference(orderReference);
         orderPlacementResponse.setOrderStatus(orderEntity.getOrderStatus());
         return orderPlacementResponse;
+    }
+
+    private void validateSubmittedPrice(OrderPlacementRequest orderPlacementRequest, SellingItem sellingItem) {
+        Long requestedAmount = orderPlacementRequest.getAmount();
+        Long pricePerOneItem = sellingItem.getPrice();
+        Long submittedPrice = orderPlacementRequest.getPrice();
+        Long requiredAMount = requestedAmount * pricePerOneItem;
+
+        if (requiredAMount > submittedPrice) {
+            throw new ServiceRuntimeException(ErrorCode.INVALID_INPUT, "Entered price is wrong");
+        }
+        if (requestedAmount < submittedPrice) {
+            log.info("User entered more than required price");
+        }
     }
 
     private void sendOrderStatusUpdateEmail(OrderStatus toOrderStatus, OrderPlacementEntity order) {
