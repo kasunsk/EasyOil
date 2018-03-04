@@ -31,6 +31,14 @@ public class SellingItemDaoImpl extends AbstractHibernateDao implements SellingI
     }
 
     @Override
+    public SellingItemEntity loadSellingItemByReference(String itemReference) {
+        String hql = "from SellingItemEntity si where si.itemReference =:itemReference";
+        Query query = getSession().createQuery(hql);
+        query.setParameter("itemReference", itemReference);
+        return (SellingItemEntity) query.uniqueResult();
+    }
+
+    @Override
     public List<SellingItemEntity> getAvailableSellingItems() {
 
         String hql = "from SellingItemEntity si where si.status =:status";

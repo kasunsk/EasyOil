@@ -16,4 +16,6 @@ public interface SellingItemDao {
     SellingItemEntity updateSellingItem(SellingItemEntity sellingItemEntity);
 
     SellingItemEntity loadSellingItem(Long orderItemId);
+
+    SellingItemEntity loadSellingItemByReference(String itemReference);
 }

@@ -11,9 +11,9 @@ import com.oilseller.oilbrocker.order.adaptor.model.OrderPlacementEntityAdaptor;
 import com.oilseller.oilbrocker.order.dao.CustomerDao;
 import com.oilseller.oilbrocker.order.dao.OrderDao;
 import com.oilseller.oilbrocker.order.dto.*;
+import com.oilseller.oilbrocker.order.entity.CustomerEntity;
 import com.oilseller.oilbrocker.order.entity.OrderPlacementEntity;
 import com.oilseller.oilbrocker.order.service.OrderService;
-import com.oilseller.oilbrocker.platform.exception.dto.ErrorCode;
 import com.oilseller.oilbrocker.platform.exception.dto.ServiceRuntimeException;
 import com.oilseller.oilbrocker.platform.thread.ThreadLocalContext;
 import com.oilseller.oilbrocker.sellingItem.dto.SellingItem;
@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -82,7 +83,7 @@ public class OrderServiceImpl implements OrderService {
         return Boolean.TRUE;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public OrderPlacementResponse placeOrder(OrderPlacementRequest orderPlacementRequest) {
         validateOrderPlacement(orderPlacementRequest);

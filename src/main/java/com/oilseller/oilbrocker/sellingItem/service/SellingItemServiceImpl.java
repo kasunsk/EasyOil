@@ -21,6 +21,8 @@ import java.util.List;
 public class SellingItemServiceImpl implements SellingItemService {
 
     private static final Logger log = LoggerFactory.getLogger(SellingItemServiceImpl.class);
+    private static final String CREATE = "CREATE";
+    private static final String UPDATE = "UPDATE";
 
     private SellingItemDao sellingItemDao;
 
@@ -40,7 +42,11 @@ public class SellingItemServiceImpl implements SellingItemService {
     @Transactional
     @Override
     public Long addSellingItem(SellingItem sellingItem) {
-        validateSellingItem(sellingItem);
+        validateSellingItem(sellingItem, CREATE);
+        SellingItemEntity currentItem = sellingItemDao.loadSellingItemByReference(sellingItem.getItemReference());
+        if (currentItem != null) {
+            throw new ServiceRuntimeException(ErrorCode.ALREADY_EXIST, "Item reference already exist");
+        }
         return sellingItemDao.addSellingItem(sellingItemAdaptor.fromDto(sellingItem));
     }
 
@@ -48,8 +54,25 @@ public class SellingItemServiceImpl implements SellingItemService {
     @Override
     public SellingItem updateSellingItem(SellingItem sellingItem) {
 
-        SellingItemEntity updateSellingItem = sellingItemDao.updateSellingItem(sellingItemAdaptor.fromDto(sellingItem));
-        return sellingItemAdaptor.fromModel(updateSellingItem);
+        validateSellingItem(sellingItem, UPDATE);
+        SellingItemEntity sellingItemEntity = sellingItemDao.loadSellingItem(sellingItem.getId());
+
+        SellingItemEntity existItem = sellingItemDao.loadSellingItemByReference(sellingItem.getItemReference());
+
+        if (existItem != null && !existItem.getId().equals(sellingItemEntity.getId())) {
+            throw new ServiceRuntimeException(ErrorCode.ALREADY_EXIST, "Item Reference Already Available");
+        }
+        sellingItem.setAvailableAmount(sellingItem.getAvailableAmount());
+        sellingItem.setValidTo(sellingItem.getValidTo());
+        sellingItem.setCurrency(sellingItem.getCurrency());
+        sellingItem.setDescription(sellingItem.getSellingItem());
+        sellingItem.setImage(sellingItem.getImage());
+        sellingItem.setPrice(sellingItem.getPrice());
+        sellingItem.setStatus(sellingItem.getStatus());
+        sellingItem.setSellingItem(sellingItem.getSellingItem());
+        sellingItem.setItemReference(sellingItem.getItemReference());
+        SellingItemEntity updatedItem = sellingItemDao.updateSellingItem(sellingItemEntity);
+        return sellingItemAdaptor.fromModel(updatedItem);
     }
 
     @Transactional
@@ -74,7 +97,18 @@ public class SellingItemServiceImpl implements SellingItemService {
         return sellingItemAdaptor.fromModel(sellingItemDao.loadSellingItem(orderItemId));
     }
 
-    private void validateSellingItem(SellingItem sellingItem) {
+    private void validateSellingItem(SellingItem sellingItem, String requestType) {
 
+        if (sellingItem == null) {
+            throw new ServiceRuntimeException(ErrorCode.INVALID_INPUT, "selling item is null");
+        }
+
+        if (requestType.equals(UPDATE) && sellingItem.getId() == null) {
+            throw new ServiceRuntimeException(ErrorCode.INVALID_INPUT, "selling item id is required");
+        }
+
+        if (sellingItem.getItemReference() == null || sellingItem.getItemReference().isEmpty()){
+            throw new ServiceRuntimeException(ErrorCode.INVALID_INPUT, "selling item reference is required");
+        }
     }
 }
