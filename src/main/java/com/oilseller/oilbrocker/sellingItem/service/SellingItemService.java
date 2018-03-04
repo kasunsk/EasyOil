@@ -13,7 +13,6 @@ public interface SellingItemService {
 
     Long addSellingItem(SellingItem sellingItem);
 
-    //TODO This is not working
     SellingItem updateSellingItem(SellingItem sellingItem);
 
     Boolean reduceSellingItemAmount(Long itemId, Long reduceAmount);

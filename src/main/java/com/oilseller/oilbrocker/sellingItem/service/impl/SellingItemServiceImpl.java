@@ -1,4 +1,4 @@
-package com.oilseller.oilbrocker.sellingItem.service;
+package com.oilseller.oilbrocker.sellingItem.service.impl;
 
 import com.oilseller.oilbrocker.platform.exception.dto.ErrorCode;
 import com.oilseller.oilbrocker.platform.exception.dto.ServiceRuntimeException;
@@ -6,6 +6,7 @@ import com.oilseller.oilbrocker.sellingItem.adaptor.SellingItemAdaptor;
 import com.oilseller.oilbrocker.sellingItem.dao.SellingItemDao;
 import com.oilseller.oilbrocker.sellingItem.dto.SellingItem;
 import com.oilseller.oilbrocker.sellingItem.entity.SellingItemEntity;
+import com.oilseller.oilbrocker.sellingItem.service.SellingItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,15 +63,15 @@ public class SellingItemServiceImpl implements SellingItemService {
         if (existItem != null && !existItem.getId().equals(sellingItemEntity.getId())) {
             throw new ServiceRuntimeException(ErrorCode.ALREADY_EXIST, "Item Reference Already Available");
         }
-        sellingItem.setAvailableAmount(sellingItem.getAvailableAmount());
-        sellingItem.setValidTo(sellingItem.getValidTo());
-        sellingItem.setCurrency(sellingItem.getCurrency());
-        sellingItem.setDescription(sellingItem.getSellingItem());
-        sellingItem.setImage(sellingItem.getImage());
-        sellingItem.setPrice(sellingItem.getPrice());
-        sellingItem.setStatus(sellingItem.getStatus());
-        sellingItem.setSellingItem(sellingItem.getSellingItem());
-        sellingItem.setItemReference(sellingItem.getItemReference());
+        sellingItemEntity.setAvailableAmount(sellingItem.getAvailableAmount());
+        sellingItemEntity.setValidTo(sellingItem.getValidTo());
+        sellingItemEntity.setCurrency(sellingItem.getCurrency());
+        sellingItemEntity.setDescription(sellingItem.getSellingItem());
+        sellingItemEntity.setImage(sellingItem.getImage());
+        sellingItemEntity.setPrice(sellingItem.getPrice());
+        sellingItemEntity.setStatus(sellingItem.getStatus());
+        sellingItemEntity.setSellingItem(sellingItem.getSellingItem());
+        sellingItemEntity.setItemReference(sellingItem.getItemReference());
         SellingItemEntity updatedItem = sellingItemDao.updateSellingItem(sellingItemEntity);
         return sellingItemAdaptor.fromModel(updatedItem);
     }

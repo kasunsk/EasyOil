@@ -34,4 +34,9 @@ public class SellingItemController {
         return sellingItemService.addSellingItem(sellingItemParamAdaptor.fromParam(sellingItemParam));
     }
 
+    @RequestMapping(method = RequestMethod.PUT)
+    public SellingItemParam updateSellingItem(@RequestBody SellingItemParam sellingItemParam) {
+        return sellingItemParamAdaptor.fromDto(sellingItemService.updateSellingItem(sellingItemParamAdaptor.fromParam(sellingItemParam)));
+    }
+
 }
