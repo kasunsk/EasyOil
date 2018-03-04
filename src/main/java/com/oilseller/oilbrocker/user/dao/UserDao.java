@@ -1,16 +1,18 @@
 package com.oilseller.oilbrocker.user.dao;
 
 import com.oilseller.oilbrocker.user.entity.UserModel;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
+@Repository("userDao")
+public interface UserDao extends JpaRepository<UserModel, Long> {
 
-public interface UserDao {
+//    Long addUser(UserModel userModel);
 
-    Long addUser(UserModel userModel);
+//    UserModel getUserById(Long userId);
 
-    UserModel getUserById(Long userId);
+    UserModel findByUsername(String username);
 
-    UserModel getUserByUsername(String username);
-
-    List<UserModel> getAllUsers();
+//    List<UserModel> getAllUsers();
 }

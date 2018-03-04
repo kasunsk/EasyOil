@@ -11,10 +11,8 @@ import com.oilseller.oilbrocker.order.adaptor.model.OrderPlacementEntityAdaptor;
 import com.oilseller.oilbrocker.order.dao.CustomerDao;
 import com.oilseller.oilbrocker.order.dao.OrderDao;
 import com.oilseller.oilbrocker.order.dto.*;
-import com.oilseller.oilbrocker.order.entity.CustomerEntity;
 import com.oilseller.oilbrocker.order.entity.OrderPlacementEntity;
 import com.oilseller.oilbrocker.order.service.OrderService;
-import com.oilseller.oilbrocker.platform.exception.dto.ServiceRuntimeException;
 import com.oilseller.oilbrocker.platform.thread.ThreadLocalContext;
 import com.oilseller.oilbrocker.sellingItem.dto.SellingItem;
 import com.oilseller.oilbrocker.sellingItem.service.SellingItemService;
@@ -22,9 +20,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -56,28 +54,28 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Long addCustomerDetails(Customer customer) {
         validateCustomer(customer);
-        return customerDao.addCustomer(customerModelAdaptor.fromDto(customer));
+        return customerDao.save(customerModelAdaptor.fromDto(customer)).getCustomerId();
     }
 
     @Transactional
     @Override
     public Customer getCustomerDetails(Long customerId) {
-        return customerModelAdaptor.fromModel(customerDao.loadCustomerById(customerId));
+        return customerModelAdaptor.fromModel(customerDao.findOne(customerId));
     }
 
     @Transactional
     @Override
     public List<OrderDetail> viewOrders() {
-        return orderModelAdaptor.fromModelList(orderDao.loadOrders());
+        return orderModelAdaptor.fromModelList((Collection<OrderPlacementEntity>) orderDao.findAll());
     }
 
     @Transactional
     @Override
     public Boolean updateOrderStatus(Long orderId, OrderStatus toOrderStatus) {
-        OrderPlacementEntity order = orderDao.loadOrder(orderId);
+        OrderPlacementEntity order = orderDao.findOne(orderId);
         OrderStatus currentOrderStatus = order.getOrderStatus();
         order.setOrderStatus(toOrderStatus);
-        orderDao.saveOrUpdateOrder(order);
+        orderDao.save(order);
         addHistoryItem(order,currentOrderStatus, toOrderStatus);
         sendOrderStatusUpdateEmail(toOrderStatus, order);
         return Boolean.TRUE;
@@ -94,11 +92,11 @@ public class OrderServiceImpl implements OrderService {
         sellingItemService.reduceSellingItemAmount(sellingItem.getId(), orderPlacementRequest.getAmount());
 
         orderEntity.setOrderItem(sellingItem.getSellingItem());
-        Long customerId = customerDao.addCustomer(customerModelAdaptor.fromDto(orderPlacementRequest.getCustomer()));
+        Long customerId = customerDao.save(customerModelAdaptor.fromDto(orderPlacementRequest.getCustomer())).getCustomerId();
         orderEntity.setCustomerId(customerId);
         orderEntity.setPaymentReference("COD");
         orderEntity.setOrderStatus(OrderStatus.PLACED);
-        orderDao.saveOrUpdateOrder(orderEntity);
+        orderDao.save(orderEntity);
         addHistoryItem(orderPlacementRequest, orderEntity);
         sendOrderCreateEmail(orderPlacementRequest, orderEntity, orderReference);
         OrderPlacementResponse orderPlacementResponse = new OrderPlacementResponse();
@@ -110,7 +108,7 @@ public class OrderServiceImpl implements OrderService {
     private void sendOrderStatusUpdateEmail(OrderStatus toOrderStatus, OrderPlacementEntity order) {
         EmailParam emailParam = new EmailParam();
         emailParam.setSubject("Order Status Changed");
-        emailParam.setReceiverAddress(customerDao.loadCustomerById(order.getCustomerId()).getEmail());
+        emailParam.setReceiverAddress(customerDao.findOne(order.getCustomerId()).getEmail());
         emailParam.setContent(" Your order status changed to " + toOrderStatus);
         emailService.sendEmail(emailParam);
     }

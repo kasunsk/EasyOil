@@ -27,7 +27,7 @@ public class TokenServiceImpl implements TokenService {
     @Transactional
     @Override
     public String addUserToken(String username) {
-        UserModel user = userDao.getUserByUsername(username);
+        UserModel user = userDao.findByUsername(username);
         UserTokenModel userTokenModel = new UserTokenModel();
         userTokenModel.setNumOfRequest(0L);
         userTokenModel.setTokenStatus(TokenStatus.VALID);
@@ -35,21 +35,26 @@ public class TokenServiceImpl implements TokenService {
         userTokenModel.setUsername(user.getUsername());
         String userToken = generateUserToken(user);
         userTokenModel.setUserToken(userToken);
-        userTokenDao.addToken(userTokenModel);
+        userTokenDao.save(userTokenModel);
         return userTokenModel.getUserToken();
     }
 
     @Transactional
     @Override
     public Boolean isValidRequest(String userToken) {
-        return userTokenDao.isValidToken(userToken);
+
+        UserTokenModel tokenModel = userTokenDao.findByUserToken(userToken);
+        if (tokenModel != null && tokenModel.getTokenStatus().equals(TokenStatus.VALID)){
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
 
     @Transactional
     @Override
     public String getUsername(String userToken) {
 
-        UserTokenModel tokenModel = userTokenDao.getUserTokenEntity(userToken);
+        UserTokenModel tokenModel = userTokenDao.findByUserToken(userToken);
         return tokenModel.getUsername();
     }
 

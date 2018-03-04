@@ -36,7 +36,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public LoginResponse login(String username, String password) {
 
-        UserModel currentUser = userDao.getUserByUsername(username);
+        UserModel currentUser = userDao.findByUsername(username);
 
         if (currentUser == null || !currentUser.getPassword().equals(password)) {
             throw new ServiceRuntimeException(ErrorCode.AUTH_ERROR, "Invalid Credentials");

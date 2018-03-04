@@ -1,21 +1,15 @@
 package com.oilseller.oilbrocker.sellingItem.dao;
 
 import com.oilseller.oilbrocker.sellingItem.entity.SellingItemEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
 
 /**
  * Created by kasun on 2/21/18.
  */
-public interface SellingItemDao {
+@Repository("sellingItemDao")
+public interface SellingItemDao extends JpaRepository<SellingItemEntity, Long> {
 
-    List<SellingItemEntity> getAvailableSellingItems();
-
-    Long addSellingItem(SellingItemEntity sellingItemEntity);
-
-    SellingItemEntity updateSellingItem(SellingItemEntity sellingItemEntity);
-
-    SellingItemEntity loadSellingItem(Long orderItemId);
-
-    SellingItemEntity loadSellingItemByReference(String itemReference);
+    SellingItemEntity findByItemReference(String itemReference);
 }

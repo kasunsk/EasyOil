@@ -9,24 +9,24 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository("orderDao")
-public class OrderDaoImpl extends AbstractHibernateDao implements OrderDao {
+//@Repository("orderDao")
+public class OrderDaoImpl { //extends AbstractHibernateDao implements OrderDao {
 
-    @Override
-    public void saveOrUpdateOrder(OrderPlacementEntity placementEntity) {
-        getSession().saveOrUpdate(placementEntity);
-//        throw new RuntimeException("Order_Placement_Error");
-    }
-
-    @Override
-    public List<OrderPlacementEntity> loadOrders() {
-        String hql = "from OrderPlacementEntity";
-        Query query = getSession().createQuery(hql);
-        return query.list();
-    }
-
-    @Override
-    public OrderPlacementEntity loadOrder(Long orderId) {
-        return getSession().get(OrderPlacementEntity.class, orderId);
-    }
+//    @Override
+//    public void saveOrUpdateOrder(OrderPlacementEntity placementEntity) {
+//        getSession().saveOrUpdate(placementEntity);
+////        throw new RuntimeException("Order_Placement_Error");
+//    }
+//
+//    @Override
+//    public List<OrderPlacementEntity> loadOrders() {
+//        String hql = "from OrderPlacementEntity";
+//        Query query = getSession().createQuery(hql);
+//        return query.list();
+//    }
+//
+//    @Override
+//    public OrderPlacementEntity loadOrder(Long orderId) {
+//        return getSession().get(OrderPlacementEntity.class, orderId);
+//    }
 }

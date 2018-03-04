@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -37,18 +38,18 @@ public class SellingItemServiceImpl implements SellingItemService {
     @Transactional
     @Override
     public List<SellingItem> loadAllSellingItems() {
-        return sellingItemAdaptor.fromModelList(sellingItemDao.getAvailableSellingItems());
+        return sellingItemAdaptor.fromModelList((Collection<SellingItemEntity>) sellingItemDao.findAll());
     }
 
     @Transactional
     @Override
     public Long addSellingItem(SellingItem sellingItem) {
         validateSellingItem(sellingItem, CREATE);
-        SellingItemEntity currentItem = sellingItemDao.loadSellingItemByReference(sellingItem.getItemReference());
+        SellingItemEntity currentItem = sellingItemDao.findByItemReference(sellingItem.getItemReference());
         if (currentItem != null) {
             throw new ServiceRuntimeException(ErrorCode.ALREADY_EXIST, "Item reference already exist");
         }
-        return sellingItemDao.addSellingItem(sellingItemAdaptor.fromDto(sellingItem));
+        return sellingItemDao.save(sellingItemAdaptor.fromDto(sellingItem)).getId();
     }
 
     @Transactional
@@ -56,9 +57,9 @@ public class SellingItemServiceImpl implements SellingItemService {
     public SellingItem updateSellingItem(SellingItem sellingItem) {
 
         validateSellingItem(sellingItem, UPDATE);
-        SellingItemEntity sellingItemEntity = sellingItemDao.loadSellingItem(sellingItem.getId());
+        SellingItemEntity sellingItemEntity = sellingItemDao.findOne(sellingItem.getId());
 
-        SellingItemEntity existItem = sellingItemDao.loadSellingItemByReference(sellingItem.getItemReference());
+        SellingItemEntity existItem = sellingItemDao.findByItemReference(sellingItem.getItemReference());
 
         if (existItem != null && !existItem.getId().equals(sellingItemEntity.getId())) {
             throw new ServiceRuntimeException(ErrorCode.ALREADY_EXIST, "Item Reference Already Available");
@@ -72,14 +73,14 @@ public class SellingItemServiceImpl implements SellingItemService {
         sellingItemEntity.setStatus(sellingItem.getStatus());
         sellingItemEntity.setSellingItem(sellingItem.getSellingItem());
         sellingItemEntity.setItemReference(sellingItem.getItemReference());
-        SellingItemEntity updatedItem = sellingItemDao.updateSellingItem(sellingItemEntity);
+        SellingItemEntity updatedItem = sellingItemDao.save(sellingItemEntity);
         return sellingItemAdaptor.fromModel(updatedItem);
     }
 
     @Transactional
     @Override
     public Boolean reduceSellingItemAmount(Long itemId, Long reduceAmount) {
-        SellingItemEntity sellingItem = sellingItemDao.loadSellingItem(itemId);
+        SellingItemEntity sellingItem = sellingItemDao.findOne(itemId);
         Long availableAmount = sellingItem.getAvailableAmount();
 
         if (reduceAmount > availableAmount) {
@@ -88,14 +89,14 @@ public class SellingItemServiceImpl implements SellingItemService {
         }
         Long newAmount = availableAmount - reduceAmount;
         sellingItem.setAvailableAmount(newAmount);
-        sellingItemDao.updateSellingItem(sellingItem);
+        sellingItemDao.save(sellingItem);
         return Boolean.TRUE;
     }
 
     @Transactional
     @Override
     public SellingItem loadSellingItem(Long orderItemId) {
-        return sellingItemAdaptor.fromModel(sellingItemDao.loadSellingItem(orderItemId));
+        return sellingItemAdaptor.fromModel(sellingItemDao.findOne(orderItemId));
     }
 
     private void validateSellingItem(SellingItem sellingItem, String requestType) {
