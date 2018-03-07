@@ -55,4 +55,10 @@ public class UserServiceImpl implements UserService {
     public List<User> loadAllUsers() {
         return userModelAdaptor.fromModelList((Collection<UserModel>) userDao.findAll());
     }
+
+    @Override
+    public void invalidLogins() {
+        
+        
+    }
 }

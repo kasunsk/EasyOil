@@ -13,4 +13,6 @@ public interface UserService {
     User loadUserById(Long userId);
 
     List<User> loadAllUsers();
+
+    void invalidLogins();
 }
