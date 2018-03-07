@@ -73,7 +73,7 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public void invalidLogin() {
 
-        Date lastTokenValidTime = Date.from(new Date().toInstant().minusSeconds(Long.getLong(environment.getProperty("token.invalid.time"))));
+        Date lastTokenValidTime = Date.from(new Date().toInstant().minusSeconds(Long.parseLong(environment.getProperty("token.invalid.time"))));
         List<UserTokenModel> tokenModels = userTokenDao.findAllByTokenStatusAndLastModifiedDateLessThan(
                 TokenStatus.VALID, lastTokenValidTime);
 
@@ -94,7 +94,7 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public void removeInvalidToken() {
 
-        Date lastTokenValidTime = Date.from(new Date().toInstant().minusSeconds(Long.getLong(environment.getProperty("token.remove.time"))));
+        Date lastTokenValidTime = Date.from(new Date().toInstant().minusSeconds(Long.parseLong(environment.getProperty("token.remove.time"))));
         List<UserTokenModel> tokenModels = userTokenDao.findAllByTokenStatusAndLastModifiedDateLessThan(TokenStatus.INVALID, lastTokenValidTime);
 
         if (tokenModels != null) {
