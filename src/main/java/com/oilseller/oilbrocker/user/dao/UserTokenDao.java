@@ -16,7 +16,7 @@ public interface UserTokenDao extends JpaRepository<UserTokenModel, Long> {
 
     UserTokenModel findByUserToken(String userToken);
 
-    List<UserTokenModel> findAllByTokenStatusAndLastModifiedDateLessThan(TokenStatus tokenStatus,Date lastModifiedDate);
+    List<UserTokenModel> findAllByTokenStatusAndLastModifiedDateLessThanOrLastModifiedDateIsNull(TokenStatus tokenStatus, Date lastModifiedDate);
 
 
     @Modifying

@@ -74,7 +74,7 @@ public class TokenServiceImpl implements TokenService {
     public void invalidLogin() {
 
         Date lastTokenValidTime = Date.from(new Date().toInstant().minusSeconds(Long.parseLong(environment.getProperty("token.invalid.time"))));
-        List<UserTokenModel> tokenModels = userTokenDao.findAllByTokenStatusAndLastModifiedDateLessThan(
+        List<UserTokenModel> tokenModels = userTokenDao.findAllByTokenStatusAndLastModifiedDateLessThanOrLastModifiedDateIsNull(
                 TokenStatus.VALID, lastTokenValidTime);
 
         if (tokenModels != null) {
@@ -82,7 +82,7 @@ public class TokenServiceImpl implements TokenService {
 
                 if (tokenModel.getLastModifiedDate() != null) {
                     tokenModel.setTokenStatus(TokenStatus.INVALID);
-                } else if (tokenModel.getCreatedDate().compareTo(lastTokenValidTime) == 0) {
+                } else if (lastTokenValidTime.compareTo(tokenModel.getCreatedDate()) == 1) {
                     tokenModel.setTokenStatus(TokenStatus.INVALID);
                 }
             }
@@ -95,7 +95,7 @@ public class TokenServiceImpl implements TokenService {
     public void removeInvalidToken() {
 
         Date lastTokenValidTime = Date.from(new Date().toInstant().minusSeconds(Long.parseLong(environment.getProperty("token.remove.time"))));
-        List<UserTokenModel> tokenModels = userTokenDao.findAllByTokenStatusAndLastModifiedDateLessThan(TokenStatus.INVALID, lastTokenValidTime);
+        List<UserTokenModel> tokenModels = userTokenDao.findAllByTokenStatusAndLastModifiedDateLessThanOrLastModifiedDateIsNull(TokenStatus.INVALID, lastTokenValidTime);
 
         if (tokenModels != null) {
             for (UserTokenModel tokenModel : tokenModels) {

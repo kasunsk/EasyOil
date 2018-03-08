@@ -49,6 +49,7 @@ public class OrderController {
         return (customerParamAdaptor.fromDto(orderService.getCustomerDetails(customerId)));
     }
 
+    @CrossOrigin
     @RequestMapping(value = "", method = RequestMethod.GET)
     public List<OrderDetailParam> viewOrders() {
         return orderDetailParamAdaptor.fromDtoList(orderService.viewOrders());
