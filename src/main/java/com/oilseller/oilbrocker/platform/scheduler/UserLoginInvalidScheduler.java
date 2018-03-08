@@ -21,14 +21,14 @@ public class UserLoginInvalidScheduler {
     }
 
     // per half an hone
-    @Scheduled(fixedDelay = 1800000L, initialDelay = 1800000L)
+    @Scheduled(fixedDelay = 1800000, initialDelay = 1800000)
     public void invalidLogin() {
         log.info("Token invalid scheduler");
         tokenService.invalidLogin();
     }
 
-    // Per 15 days
-    @Scheduled(fixedDelay = 1296000000L, initialDelay = 1296000000L)
+    // Per 3 days
+    @Scheduled(fixedDelay = 259200000, initialDelay = 10000)
     public void removeInvalidLogin() {
         log.info("Token removing scheduler");
         tokenService.removeInvalidToken();
