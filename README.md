@@ -6,13 +6,13 @@ Installation Guide
 
 * Run **./gradlew clean build** in linux terminal  if gradle not installed.
 
-* import or run easy_oil.sql in /db to add database.
+* import or run **easy_oil.sql** in /db to add database.
 
 Configuration
 =============
 
-* Change mysql database username (spring.datasource.username) and password 
-spring.datasource.password in application.properties configuration (in /resources).
+* Change mysql database username (**spring.datasource.username**) and password 
+**spring.datasource.password** in **application.properties** configuration (in /resources).
 
 
 Deployment
