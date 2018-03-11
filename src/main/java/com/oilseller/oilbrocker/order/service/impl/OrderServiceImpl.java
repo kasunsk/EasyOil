@@ -11,11 +11,13 @@ import com.oilseller.oilbrocker.order.adaptor.model.OrderPlacementEntityAdaptor;
 import com.oilseller.oilbrocker.order.dao.CustomerDao;
 import com.oilseller.oilbrocker.order.dao.OrderDao;
 import com.oilseller.oilbrocker.order.dto.*;
+import com.oilseller.oilbrocker.order.entity.CustomerEntity;
 import com.oilseller.oilbrocker.order.entity.OrderPlacementEntity;
 import com.oilseller.oilbrocker.order.service.OrderService;
 import com.oilseller.oilbrocker.platform.exception.dto.ErrorCode;
 import com.oilseller.oilbrocker.platform.exception.dto.ServiceRuntimeException;
 import com.oilseller.oilbrocker.platform.thread.ThreadLocalContext;
+import com.oilseller.oilbrocker.platform.util.DateUtil;
 import com.oilseller.oilbrocker.sellingItem.dto.SellingItem;
 import com.oilseller.oilbrocker.sellingItem.service.SellingItemService;
 import org.slf4j.Logger;
@@ -95,7 +97,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public OrderPlacementResponse placeOrder(OrderPlacementRequest orderPlacementRequest) {
+    public Long placeOrder(OrderPlacementRequest orderPlacementRequest) {
         validateOrderPlacement(orderPlacementRequest);
         SellingItem sellingItem = sellingItemService.loadSellingItem(orderPlacementRequest.getOrderItemId());
         validateSubmittedPrice(orderPlacementRequest, sellingItem);
@@ -112,10 +114,31 @@ public class OrderServiceImpl implements OrderService {
         orderDao.save(orderEntity);
         addHistoryItem(orderPlacementRequest, orderEntity);
         sendOrderCreateEmail(orderPlacementRequest, orderEntity, orderReference);
-        OrderPlacementResponse orderPlacementResponse = new OrderPlacementResponse();
-        orderPlacementResponse.setOrderReference(orderReference);
-        orderPlacementResponse.setOrderStatus(orderEntity.getOrderStatus());
-        return orderPlacementResponse;
+        return orderEntity.getOrderId();
+    }
+
+    @Override
+    public Order loadOrder(Long orderId) {
+
+        OrderPlacementEntity orderEntity = orderDao.findOne(orderId);
+        if (orderEntity == null) {
+            throw new ServiceRuntimeException(ErrorCode.NOT_FOUND, "Order not found");
+        }
+        CustomerEntity customerEntity = customerDao.findOne(orderEntity.getCustomerId());
+        if (customerEntity == null) {
+            throw new ServiceRuntimeException(ErrorCode.NOT_FOUND, "Customer details not found");
+        }
+        Order order = new Order();
+        order.setOrderId(orderEntity.getOrderId());
+        order.setOrderItem(orderEntity.getOrderItem());
+        order.setCustomerAddress(customerEntity.getCustomerAddress());
+        order.setOrderReference(orderEntity.getOrderReference());
+        order.setOrderStatus(orderEntity.getOrderStatus());
+        order.setCustomerEmail(customerEntity.getEmail());
+        order.setCustomerMobile(customerEntity.getMobileNumber());
+        order.setCustomerName(customerEntity.getCustomerName());
+        order.setCreatedDate(DateUtil.toSimpleDate(customerEntity.getCreatedDate()));
+        return order;
     }
 
     private void validateSubmittedPrice(OrderPlacementRequest orderPlacementRequest, SellingItem sellingItem) {

@@ -2,6 +2,7 @@ package com.oilseller.oilbrocker.order.controller;
 
 import com.oilseller.oilbrocker.history.service.HistoryService;
 import com.oilseller.oilbrocker.order.adaptor.param.*;
+import com.oilseller.oilbrocker.order.dto.Order;
 import com.oilseller.oilbrocker.order.dto.OrderPlacementRequest;
 import com.oilseller.oilbrocker.order.dto.OrderPlacementResponse;
 import com.oilseller.oilbrocker.order.param.*;
@@ -33,10 +34,14 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/place", method = RequestMethod.POST)
-    public OrderPlacementResponseParam placeOrder(@RequestBody OrderPlacementRequestParam orderPlacementRequestParam) {
+    public Long placeOrder(@RequestBody OrderPlacementRequestParam orderPlacementRequestParam) {
         OrderPlacementRequest orderPlacementRequest = orderPlacementParamAdaptor.fromParam(orderPlacementRequestParam);
-        OrderPlacementResponse placementResponse = orderService.placeOrder(orderPlacementRequest);
-        return responseParamAdaptor.fromDto(placementResponse);
+        return orderService.placeOrder(orderPlacementRequest);
+    }
+
+    @RequestMapping(value = "/load/{orderId}", method = RequestMethod.GET)
+    public Order placeOrder(@PathVariable("orderId") Long orderId) {
+        return orderService.loadOrder(orderId);
     }
 
     @RequestMapping(value = "/customer", method = RequestMethod.POST)

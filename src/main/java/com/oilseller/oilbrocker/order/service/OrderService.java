@@ -10,7 +10,9 @@ public interface OrderService {
 
     Customer getCustomerDetails(Long customerId);
 
-    OrderPlacementResponse placeOrder(OrderPlacementRequest orderPlacementRequest);
+    Long placeOrder(OrderPlacementRequest orderPlacementRequest);
+
+    Order loadOrder(Long orderId);
 
     List<OrderDetail> viewOrders();
 
