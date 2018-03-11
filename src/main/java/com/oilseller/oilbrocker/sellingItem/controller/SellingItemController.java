@@ -24,6 +24,7 @@ public class SellingItemController {
         this.sellingItemService = sellingItemService;
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<SellingItemParam> getSellingItems() {
         return sellingItemParamAdaptor.fromDtoList(sellingItemService.loadAllSellingItems());

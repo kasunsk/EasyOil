@@ -4,10 +4,7 @@ import com.oilseller.oilbrocker.user.adaptor.UserParamAdaptor;
 import com.oilseller.oilbrocker.user.param.UserParam;
 import com.oilseller.oilbrocker.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,6 +26,7 @@ public class UserController {
         return userService.addUser(userParamAdaptor.fromParam(userParam));
     }
 
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.GET)
     public List<UserParam> loadAllUsers() {
         return userParamAdaptor.fromDtoList(userService.loadAllUsers());

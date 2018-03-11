@@ -44,6 +44,7 @@ public class OrderController {
         return orderService.addCustomerDetails(customerParamAdaptor.fromParam(customerDetailsParam));
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.GET)
     public CustomerDetailsParam getCustomerById(@PathVariable("customerId") Long customerId) {
         return (customerParamAdaptor.fromDto(orderService.getCustomerDetails(customerId)));
@@ -60,6 +61,7 @@ public class OrderController {
         return orderService.updateOrderStatus(statusUpdateRequest.getOrderId(), statusUpdateRequest.getToOrderStatus());
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/history/{orderId}", method = RequestMethod.GET)
     public List<OrderHistoryParam> loadHistoryItemsByOrderId(@PathVariable("orderId") Long orderId) {
         return historyParamAdaptor.fromDtoList(historyService.loadHistoryItemByOrderId(orderId));
