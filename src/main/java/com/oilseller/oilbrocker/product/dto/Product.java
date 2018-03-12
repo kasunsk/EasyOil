@@ -1,51 +1,25 @@
-package com.oilseller.oilbrocker.sellingItem.entity;
+package com.oilseller.oilbrocker.product.dto;
 
-import com.oilseller.oilbrocker.platform.entity.AbstractTrackableEntity;
-import com.oilseller.oilbrocker.sellingItem.dto.SellingItemStatus;
-
-import javax.persistence.*;
 import java.util.Date;
 
 /**
  * Created by kasun on 2/21/18.
  */
-@Entity
-@Table(name = "SELLING_ITEM")
-public class SellingItemEntity extends AbstractTrackableEntity {
+public class Product {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ITEM_ID", nullable = false)
     private Long id;
-
-    @Column(name = "ITEM_REFERENCE", nullable = false)
-    private String itemReference;
-
-    @Column(name = "ITEM_NAME", nullable = false)
     private String sellingItem;
-
-    @Column(name = "AVAILABLE_AMOUNT", nullable = false)
+    private String itemReference;
     private Long availableAmount;
-
-    @Column(name = "DESCRIPTION", nullable = false)
     private String description;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "STATUS", nullable = false)
-    private SellingItemStatus status;
-
-    @Column(name = "PRICE", nullable = false)
     private Long price;
-
-    @Column(name = "CURRENCY", nullable = false)
     private String currency;
-
-    @Column(name = "IMAGE_URL", nullable = false)
+    private ProductStatus status;
     private String image;
-
-    @Column(name = "VALID_TO", nullable = false)
     private Date validTo;
-
+    private Date createdDate;
+    private Date lastModifiedDate;
+    private Long version;
 
     public Long getId() {
         return id;
@@ -55,20 +29,20 @@ public class SellingItemEntity extends AbstractTrackableEntity {
         this.id = id;
     }
 
-    public String getItemReference() {
-        return itemReference;
-    }
-
-    public void setItemReference(String itemReference) {
-        this.itemReference = itemReference;
-    }
-
     public String getSellingItem() {
         return sellingItem;
     }
 
     public void setSellingItem(String sellingItem) {
         this.sellingItem = sellingItem;
+    }
+
+    public String getItemReference() {
+        return itemReference;
+    }
+
+    public void setItemReference(String itemReference) {
+        this.itemReference = itemReference;
     }
 
     public Long getAvailableAmount() {
@@ -87,14 +61,6 @@ public class SellingItemEntity extends AbstractTrackableEntity {
         this.description = description;
     }
 
-    public SellingItemStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(SellingItemStatus status) {
-        this.status = status;
-    }
-
     public Long getPrice() {
         return price;
     }
@@ -111,6 +77,14 @@ public class SellingItemEntity extends AbstractTrackableEntity {
         this.currency = currency;
     }
 
+    public ProductStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ProductStatus status) {
+        this.status = status;
+    }
+
     public String getImage() {
         return image;
     }
@@ -125,5 +99,29 @@ public class SellingItemEntity extends AbstractTrackableEntity {
 
     public void setValidTo(Date validTo) {
         this.validTo = validTo;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Date lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

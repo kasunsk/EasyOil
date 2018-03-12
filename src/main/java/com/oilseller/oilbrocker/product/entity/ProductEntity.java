@@ -1,21 +1,51 @@
-package com.oilseller.oilbrocker.sellingItem.param;
+package com.oilseller.oilbrocker.product.entity;
 
+import com.oilseller.oilbrocker.platform.entity.AbstractTrackableEntity;
+import com.oilseller.oilbrocker.product.dto.ProductStatus;
 
-public class SellingItemParam {
+import javax.persistence.*;
+import java.util.Date;
 
+/**
+ * Created by kasun on 2/21/18.
+ */
+@Entity
+@Table(name = "PRODUCT")
+public class ProductEntity extends AbstractTrackableEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ITEM_ID", nullable = false)
     private Long id;
+
+    @Column(name = "ITEM_REFERENCE", nullable = false)
     private String itemReference;
+
+    @Column(name = "ITEM_NAME", nullable = false)
     private String sellingItem;
+
+    @Column(name = "AVAILABLE_AMOUNT", nullable = false)
     private Long availableAmount;
+
+    @Column(name = "DESCRIPTION", nullable = false)
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "STATUS", nullable = false)
+    private ProductStatus status;
+
+    @Column(name = "PRICE", nullable = false)
     private Long price;
+
+    @Column(name = "CURRENCY", nullable = false)
     private String currency;
-    private String status;
+
+    @Column(name = "IMAGE_URL", nullable = false)
     private String image;
-    private String validUntil;
-    private String createdDate;
-    private String lastModifiedDate;
-    private Long version;
+
+    @Column(name = "VALID_TO", nullable = false)
+    private Date validTo;
+
 
     public Long getId() {
         return id;
@@ -57,6 +87,14 @@ public class SellingItemParam {
         this.description = description;
     }
 
+    public ProductStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ProductStatus status) {
+        this.status = status;
+    }
+
     public Long getPrice() {
         return price;
     }
@@ -73,14 +111,6 @@ public class SellingItemParam {
         this.currency = currency;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getImage() {
         return image;
     }
@@ -89,35 +119,11 @@ public class SellingItemParam {
         this.image = image;
     }
 
-    public String getValidUntil() {
-        return validUntil;
+    public Date getValidTo() {
+        return validTo;
     }
 
-    public void setValidUntil(String validUntil) {
-        this.validUntil = validUntil;
-    }
-
-    public String getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(String lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
+    public void setValidTo(Date validTo) {
+        this.validTo = validTo;
     }
 }

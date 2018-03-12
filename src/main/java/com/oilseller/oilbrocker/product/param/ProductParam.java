@@ -1,24 +1,20 @@
-package com.oilseller.oilbrocker.sellingItem.dto;
+package com.oilseller.oilbrocker.product.param;
 
-import java.util.Date;
 
-/**
- * Created by kasun on 2/21/18.
- */
-public class SellingItem {
+public class ProductParam {
 
     private Long id;
-    private String sellingItem;
     private String itemReference;
+    private String sellingItem;
     private Long availableAmount;
     private String description;
     private Long price;
     private String currency;
-    private SellingItemStatus status;
+    private String status;
     private String image;
-    private Date validTo;
-    private Date createdDate;
-    private Date lastModifiedDate;
+    private String validUntil;
+    private String createdDate;
+    private String lastModifiedDate;
     private Long version;
 
     public Long getId() {
@@ -29,20 +25,20 @@ public class SellingItem {
         this.id = id;
     }
 
-    public String getSellingItem() {
-        return sellingItem;
-    }
-
-    public void setSellingItem(String sellingItem) {
-        this.sellingItem = sellingItem;
-    }
-
     public String getItemReference() {
         return itemReference;
     }
 
     public void setItemReference(String itemReference) {
         this.itemReference = itemReference;
+    }
+
+    public String getSellingItem() {
+        return sellingItem;
+    }
+
+    public void setSellingItem(String sellingItem) {
+        this.sellingItem = sellingItem;
     }
 
     public Long getAvailableAmount() {
@@ -77,11 +73,11 @@ public class SellingItem {
         this.currency = currency;
     }
 
-    public SellingItemStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(SellingItemStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -93,27 +89,27 @@ public class SellingItem {
         this.image = image;
     }
 
-    public Date getValidTo() {
-        return validTo;
+    public String getValidUntil() {
+        return validUntil;
     }
 
-    public void setValidTo(Date validTo) {
-        this.validTo = validTo;
+    public void setValidUntil(String validUntil) {
+        this.validUntil = validUntil;
     }
 
-    public Date getCreatedDate() {
+    public String getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
     }
 
-    public Date getLastModifiedDate() {
+    public String getLastModifiedDate() {
         return lastModifiedDate;
     }
 
-    public void setLastModifiedDate(Date lastModifiedDate) {
+    public void setLastModifiedDate(String lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
 

@@ -18,8 +18,8 @@ import com.oilseller.oilbrocker.platform.exception.dto.ErrorCode;
 import com.oilseller.oilbrocker.platform.exception.dto.ServiceRuntimeException;
 import com.oilseller.oilbrocker.platform.thread.ThreadLocalContext;
 import com.oilseller.oilbrocker.platform.util.DateUtil;
-import com.oilseller.oilbrocker.sellingItem.dto.SellingItem;
-import com.oilseller.oilbrocker.sellingItem.service.SellingItemService;
+import com.oilseller.oilbrocker.product.dto.Product;
+import com.oilseller.oilbrocker.product.service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,16 +41,16 @@ public class OrderServiceImpl implements OrderService {
     private OrderDao orderDao;
     private EmailService emailService;
     private HistoryService historyService;
-    private SellingItemService sellingItemService;
+    private ProductService productService;
     private CustomerModelAdaptor customerModelAdaptor = new CustomerModelAdaptor();
     private OrderPlacementEntityAdaptor orderPlacementModelAdaptor = new OrderPlacementEntityAdaptor();
     private OrderDetailModelAdaptor orderModelAdaptor = new OrderDetailModelAdaptor();
 
     @Autowired
-    public OrderServiceImpl(CustomerDao customerDao, OrderDao orderDao ,SellingItemService sellingItemService,
+    public OrderServiceImpl(CustomerDao customerDao, OrderDao orderDao ,ProductService productService,
                             EmailService emailService, HistoryService historyService) {
         this.customerDao = customerDao;
-        this.sellingItemService = sellingItemService;
+        this.productService = productService;
         this.orderDao = orderDao;
         this.emailService = emailService;
         this.historyService = historyService;
@@ -99,14 +99,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public String placeOrder(OrderPlacementRequest orderPlacementRequest) {
         validateOrderPlacement(orderPlacementRequest);
-        SellingItem sellingItem = sellingItemService.loadSellingItem(orderPlacementRequest.getOrderItemId());
-        validateSubmittedPrice(orderPlacementRequest, sellingItem);
+        Product product = productService.loadProduct(orderPlacementRequest.getOrderItemId());
+        validateSubmittedPrice(orderPlacementRequest, product);
         OrderPlacementEntity orderEntity = orderPlacementModelAdaptor.fromDto(orderPlacementRequest);
         String orderReference = generateOrderReference(orderPlacementRequest);
         orderEntity.setOrderReference(orderReference);
-        sellingItemService.reduceSellingItemAmount(sellingItem.getId(), orderPlacementRequest.getAmount());
+        productService.reduceProductAmount(product.getId(), orderPlacementRequest.getAmount());
 
-        orderEntity.setOrderItem(sellingItem.getSellingItem());
+        orderEntity.setOrderItem(product.getSellingItem());
         Long customerId = customerDao.save(customerModelAdaptor.fromDto(orderPlacementRequest.getCustomer())).getCustomerId();
         orderEntity.setCustomerId(customerId);
         orderEntity.setPaymentReference("COD");
@@ -159,9 +159,9 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
-    private void validateSubmittedPrice(OrderPlacementRequest orderPlacementRequest, SellingItem sellingItem) {
+    private void validateSubmittedPrice(OrderPlacementRequest orderPlacementRequest, Product product) {
         Long requestedAmount = orderPlacementRequest.getAmount();
-        Long pricePerOneItem = sellingItem.getPrice();
+        Long pricePerOneItem = product.getPrice();
         Long submittedPrice = orderPlacementRequest.getPrice();
         Long requiredAMount = requestedAmount * pricePerOneItem;
 
