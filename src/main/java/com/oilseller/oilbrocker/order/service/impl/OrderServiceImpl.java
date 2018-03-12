@@ -97,7 +97,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Long placeOrder(OrderPlacementRequest orderPlacementRequest) {
+    public String placeOrder(OrderPlacementRequest orderPlacementRequest) {
         validateOrderPlacement(orderPlacementRequest);
         SellingItem sellingItem = sellingItemService.loadSellingItem(orderPlacementRequest.getOrderItemId());
         validateSubmittedPrice(orderPlacementRequest, sellingItem);
@@ -114,9 +114,10 @@ public class OrderServiceImpl implements OrderService {
         orderDao.save(orderEntity);
         addHistoryItem(orderPlacementRequest, orderEntity);
         sendOrderCreateEmail(orderPlacementRequest, orderEntity, orderReference);
-        return orderEntity.getOrderId();
+        return orderEntity.getOrderReference();
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Order loadOrder(Long orderId) {
 
@@ -124,6 +125,11 @@ public class OrderServiceImpl implements OrderService {
         if (orderEntity == null) {
             throw new ServiceRuntimeException(ErrorCode.NOT_FOUND, "Order not found");
         }
+        Order order = getOrder(orderEntity);
+        return order;
+    }
+
+    private Order getOrder(OrderPlacementEntity orderEntity) {
         CustomerEntity customerEntity = customerDao.findOne(orderEntity.getCustomerId());
         if (customerEntity == null) {
             throw new ServiceRuntimeException(ErrorCode.NOT_FOUND, "Customer details not found");
@@ -139,6 +145,18 @@ public class OrderServiceImpl implements OrderService {
         order.setCustomerName(customerEntity.getCustomerName());
         order.setCreatedDate(DateUtil.toSimpleDate(customerEntity.getCreatedDate()));
         return order;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public Order loadOrderByReference(String reference) {
+        OrderPlacementEntity orderEntity =  orderDao.findByOrderReference(reference);
+        if (orderEntity == null) {
+            throw new ServiceRuntimeException(ErrorCode.NOT_FOUND, "Order not found");
+        }
+        Order order = getOrder(orderEntity);
+        return order;
+
     }
 
     private void validateSubmittedPrice(OrderPlacementRequest orderPlacementRequest, SellingItem sellingItem) {

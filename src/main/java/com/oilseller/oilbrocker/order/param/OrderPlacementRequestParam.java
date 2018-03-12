@@ -2,7 +2,7 @@ package com.oilseller.oilbrocker.order.param;
 
 public class OrderPlacementRequestParam {
 
-    private CustomerDetailsParam customerDetailsParam;
+    private CustomerDetailsParam customer;
     private Long orderItemId;
     private Long amount;
     private Long price;
@@ -10,12 +10,12 @@ public class OrderPlacementRequestParam {
     private String paymentType;
     private String paymentStatus;
 
-    public CustomerDetailsParam getCustomerDetailsParam() {
-        return customerDetailsParam;
+    public CustomerDetailsParam getCustomer() {
+        return customer;
     }
 
-    public void setCustomerDetailsParam(CustomerDetailsParam customerDetailsParam) {
-        this.customerDetailsParam = customerDetailsParam;
+    public void setCustomer(CustomerDetailsParam customer) {
+        this.customer = customer;
     }
 
     public Long getOrderItemId() {

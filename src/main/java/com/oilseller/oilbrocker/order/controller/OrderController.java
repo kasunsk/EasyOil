@@ -5,13 +5,13 @@ import com.oilseller.oilbrocker.order.adaptor.param.*;
 import com.oilseller.oilbrocker.order.dto.Order;
 import com.oilseller.oilbrocker.order.dto.OrderPlacementRequest;
 import com.oilseller.oilbrocker.order.dto.OrderPlacementResponse;
+import com.oilseller.oilbrocker.order.dto.OrderStatus;
 import com.oilseller.oilbrocker.order.param.*;
 import com.oilseller.oilbrocker.order.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.PrimitiveIterator;
 
 
 @RestController
@@ -33,15 +33,20 @@ public class OrderController {
         this.historyService =historyService;
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/place", method = RequestMethod.POST)
-    public Long placeOrder(@RequestBody OrderPlacementRequestParam orderPlacementRequestParam) {
+    public OrderPlacementResponse placeOrder(@RequestBody OrderPlacementRequestParam orderPlacementRequestParam) {
         OrderPlacementRequest orderPlacementRequest = orderPlacementParamAdaptor.fromParam(orderPlacementRequestParam);
-        return orderService.placeOrder(orderPlacementRequest);
+        OrderPlacementResponse response = new OrderPlacementResponse();
+        response.setOrderReference(orderService.placeOrder(orderPlacementRequest));
+        response.setOrderStatus(OrderStatus.PLACED);
+        return response;
     }
 
-    @RequestMapping(value = "/load/{orderId}", method = RequestMethod.GET)
-    public Order placeOrder(@PathVariable("orderId") Long orderId) {
-        return orderService.loadOrder(orderId);
+    @CrossOrigin
+    @RequestMapping(value = "/load/{reference}", method = RequestMethod.GET)
+    public Order placeOrder(@PathVariable("reference") String reference) {
+        return orderService.loadOrderByReference(reference);
     }
 
     @RequestMapping(value = "/customer", method = RequestMethod.POST)

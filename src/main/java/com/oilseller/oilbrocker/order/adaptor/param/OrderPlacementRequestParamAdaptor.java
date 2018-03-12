@@ -34,7 +34,7 @@ public class OrderPlacementRequestParamAdaptor extends AbstractParamAdaptor<Orde
     @Override
     public OrderPlacementRequest fromParam(OrderPlacementRequestParam document) {
         OrderPlacementRequest placementRequest = super.fromParam(document);
-        placementRequest.setCustomer(customerParamAdaptor.fromParam(document.getCustomerDetailsParam()));
+        placementRequest.setCustomer(customerParamAdaptor.fromParam(document.getCustomer()));
         return placementRequest;
     }
 }

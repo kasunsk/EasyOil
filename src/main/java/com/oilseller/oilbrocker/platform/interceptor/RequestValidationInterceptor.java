@@ -51,7 +51,8 @@ public class RequestValidationInterceptor implements HandlerInterceptor {
     private boolean isaAuthenticateRequired(HttpServletRequest request) {
         return !(request.getRequestURI().contains("login") || request.getRequestURI().contains("error")
                 || request.getMethod().equals(OPTIONS.toString()) || request.getRequestURI().contains("order/place")
-                || request.getRequestURI().contains("sellitem/list"));
+                || request.getRequestURI().contains("sellitem/list") || request.getRequestURI().contains("sellitem/load")
+        || request.getRequestURI().contains("order/load"));
     }
 
     private void validateUserToken(String userToken) {

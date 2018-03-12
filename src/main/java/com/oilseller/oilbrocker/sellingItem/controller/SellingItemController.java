@@ -30,6 +30,12 @@ public class SellingItemController {
         return sellingItemParamAdaptor.fromDtoList(sellingItemService.loadAllSellingItems());
     }
 
+    @CrossOrigin
+    @RequestMapping(value = "/load/{productId}", method = RequestMethod.GET)
+    public SellingItemParam getSellingItem(@PathVariable("productId") Long productId) {
+        return sellingItemParamAdaptor.fromDto(sellingItemService.loadSellingItem(productId));
+    }
+
     @RequestMapping(method = RequestMethod.POST)
     public Long addSellingItem(@RequestBody SellingItemParam sellingItemParam) {
         return sellingItemService.addSellingItem(sellingItemParamAdaptor.fromParam(sellingItemParam));

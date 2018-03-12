@@ -10,9 +10,11 @@ public interface OrderService {
 
     Customer getCustomerDetails(Long customerId);
 
-    Long placeOrder(OrderPlacementRequest orderPlacementRequest);
+    String placeOrder(OrderPlacementRequest orderPlacementRequest);
 
     Order loadOrder(Long orderId);
+
+    Order loadOrderByReference(String reference);
 
     List<OrderDetail> viewOrders();
 
