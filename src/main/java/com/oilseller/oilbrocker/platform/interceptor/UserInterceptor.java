@@ -47,11 +47,7 @@ public class UserInterceptor implements HandlerInterceptor {
     }
 
     private String getUsername(String userToken) {
-
-        String[] splitted = userToken.split("\\s+");
-        String token = splitted[1];
-
-        return tokenService.getUsername(token);
+        return tokenService.getUsername(userToken);
     }
 
     @Override

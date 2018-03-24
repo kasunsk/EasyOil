@@ -57,10 +57,7 @@ public class RequestValidationInterceptor implements HandlerInterceptor {
 
     private void validateUserToken(String userToken) {
 
-        String[] splitted = userToken.split("\\s+");
-        String token = splitted[1];
-
-        if (!tokenService.isValidRequest(token)) {
+        if (!tokenService.isValidRequest(userToken)) {
             throw new ServiceRuntimeException(ErrorCode.AUTH_ERROR, "Invalid Token");
         }
     }
