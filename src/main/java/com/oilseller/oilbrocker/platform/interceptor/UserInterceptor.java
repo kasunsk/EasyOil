@@ -28,11 +28,11 @@ public class UserInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if(isaAuthenticateRequired(request)) {
-            String authorization = request.getHeader("Authorization");
-            String username = getUsername(authorization);
+            String accessToken = request.getHeader("Authorization");
+            String username = getUsername(accessToken);
             log.info("Request by user : {}", username);
 
-            Context context = new Context(username);
+            Context context = new Context(username, accessToken);
             ThreadLocalContext.setContext(context);
         }
         return true;

@@ -38,9 +38,9 @@ public class RequestValidationInterceptor implements HandlerInterceptor {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             Method methodName = handlerMethod.getMethod();
             log.info("Handler method : {} ", methodName.getName());
-            String authorization = request.getHeader("Authorization");
-            validateUserToken(authorization);
-            if (!authService.validateUserToken(authorization)) {
+            String accessToken = request.getHeader("Authorization");
+            validateUserToken(accessToken);
+            if (!authService.validateUserToken(accessToken)) {
                 log.error("Authentication fail for {} in user {} ", methodName, "user");
                 throw new ServiceRuntimeException(ErrorCode.AUTH_ERROR, "Authentication fail");
             }

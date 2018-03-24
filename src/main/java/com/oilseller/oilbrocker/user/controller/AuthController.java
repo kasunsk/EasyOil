@@ -22,4 +22,10 @@ public class AuthController {
     public LoginResponse login(@RequestBody LoginParam loginParam) {
         return authService.login(loginParam.getUsername(), loginParam.getPassword());
     }
+
+    @CrossOrigin
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public void logout() {
+        authService.logout();
+    }
 }

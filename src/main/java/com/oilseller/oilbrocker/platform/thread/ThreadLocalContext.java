@@ -14,6 +14,10 @@ public class ThreadLocalContext {
         return threadLocal.get().getUsername();
     }
 
+    public static String getAccessToken(){
+        return threadLocal.get().getAccessToken();
+    }
+
     public static void clear() {
         threadLocal.set(null);
     }

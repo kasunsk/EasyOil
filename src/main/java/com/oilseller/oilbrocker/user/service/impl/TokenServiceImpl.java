@@ -1,5 +1,6 @@
 package com.oilseller.oilbrocker.user.service.impl;
 
+import com.oilseller.oilbrocker.platform.thread.ThreadLocalContext;
 import com.oilseller.oilbrocker.user.dao.UserDao;
 import com.oilseller.oilbrocker.user.dao.UserTokenDao;
 import com.oilseller.oilbrocker.user.dto.TokenStatus;
@@ -23,7 +24,7 @@ public class TokenServiceImpl implements TokenService {
     private Environment environment;
 
     @Autowired
-    public TokenServiceImpl( UserDao userDao, UserTokenDao userTokenDao, Environment environment) {
+    public TokenServiceImpl(UserDao userDao, UserTokenDao userTokenDao, Environment environment) {
         this.userTokenDao = userTokenDao;
         this.userDao = userDao;
         this.environment = environment;
@@ -59,6 +60,15 @@ public class TokenServiceImpl implements TokenService {
             }
         }
         return Boolean.FALSE;
+    }
+
+    @Transactional
+    @Override
+    public void invalidToken() {
+        String accessToken = ThreadLocalContext.getAccessToken();
+        UserTokenModel userToken = userTokenDao.findByUserToken(accessToken);
+        userToken.setTokenStatus(TokenStatus.INVALID);
+        userTokenDao.save(userToken);
     }
 
     @Transactional

@@ -53,6 +53,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     @Override
     public Boolean logout() {
-        return null;
+        tokenService.invalidToken();
+        return Boolean.TRUE;
     }
 }

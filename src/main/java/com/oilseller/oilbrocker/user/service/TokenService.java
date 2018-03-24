@@ -6,6 +6,8 @@ public interface TokenService {
 
     Boolean isValidRequest(String userToken);
 
+    void invalidToken();
+
     String getUsername(String userToken);
 
     void invalidLogin();
