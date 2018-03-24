@@ -28,7 +28,7 @@ public class UserInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if(isaAuthenticateRequired(request)) {
-            String token = request.getHeader("token");
+            String token = request.getHeader("access-token");
             String username = getUsername(token);
             log.info("Request by user : {}", username);
 
