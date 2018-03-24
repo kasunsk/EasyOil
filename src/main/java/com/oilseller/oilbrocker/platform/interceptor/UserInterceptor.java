@@ -28,8 +28,8 @@ public class UserInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if(isaAuthenticateRequired(request)) {
-            String token = request.getHeader("access-token");
-            String username = getUsername(token);
+            String authorization = request.getHeader("Authorization");
+            String username = getUsername(authorization);
             log.info("Request by user : {}", username);
 
             Context context = new Context(username);
@@ -46,7 +46,11 @@ public class UserInterceptor implements HandlerInterceptor {
         );
     }
 
-    private String getUsername(String token) {
+    private String getUsername(String userToken) {
+
+        String[] splitted = userToken.split("\\s+");
+        String token = splitted[1];
+
         return tokenService.getUsername(token);
     }
 
