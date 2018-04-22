@@ -21,7 +21,7 @@ public class ProductParamAdaptor extends AbstractParamAdaptor<ProductParam, Prod
     @Override
     public ProductParam fromDto(Product product) {
         ProductParam productParam = super.fromDto(product);
-        productParam.setValidUntil(DateUtil.toSimpleDate(product.getValidTo()));
+        productParam.setValidUntil(DateUtil.toSimpleDateWithoutTime(product.getValidTo()));
         productParam.setCreatedDate(DateUtil.toSimpleDate(product.getCreatedDate()));
         productParam.setLastModifiedDate(DateUtil.toSimpleDate(product.getLastModifiedDate()));
         return productParam;
@@ -31,7 +31,7 @@ public class ProductParamAdaptor extends AbstractParamAdaptor<ProductParam, Prod
     public Product fromParam(ProductParam document) {
         Product product = super.fromParam(document);
         try {
-            product.setValidTo(DateUtil.fromSimpleDateStringToDate(document.getValidUntil()));
+            product.setValidTo(DateUtil.fromSimpleDateStringToSimpleDate(document.getValidUntil()));
         } catch (ParseException e) {
             log.error("Invalid Date Option", e);
             throw new RuntimeException(e);

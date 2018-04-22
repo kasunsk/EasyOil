@@ -36,6 +36,7 @@ public class ProductController {
         return productParamAdaptor.fromDto(productService.loadProduct(productId));
     }
 
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.POST)
     public Long addProductItem(@RequestBody ProductParam productParam) {
         return productService.addProduct(productParamAdaptor.fromParam(productParam));
