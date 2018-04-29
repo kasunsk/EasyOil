@@ -19,4 +19,6 @@ public interface OrderService {
     List<OrderDetail> viewOrders();
 
     Boolean updateOrderStatus(Long orderId, OrderStatus orderStatus);
+
+    Order update(Order order);
 }

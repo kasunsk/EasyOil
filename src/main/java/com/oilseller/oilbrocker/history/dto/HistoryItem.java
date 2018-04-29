@@ -1,6 +1,5 @@
 package com.oilseller.oilbrocker.history.dto;
 
-import com.oilseller.oilbrocker.order.dto.OrderStatus;
 
 import java.util.Date;
 
@@ -10,8 +9,8 @@ public class HistoryItem {
     private HistoryType historyType;
     private Long orderId;
     private Long sellingItemId;
-    private OrderStatus fromStatus;
-    private OrderStatus toStatus;
+    private String fromStatus;
+    private String toStatus;
     private String username;
     private String userNote;
     private Date createdDate;
@@ -50,19 +49,19 @@ public class HistoryItem {
         this.sellingItemId = sellingItemId;
     }
 
-    public OrderStatus getFromStatus() {
+    public String getFromStatus() {
         return fromStatus;
     }
 
-    public void setFromStatus(OrderStatus fromStatus) {
+    public void setFromStatus(String fromStatus) {
         this.fromStatus = fromStatus;
     }
 
-    public OrderStatus getToStatus() {
+    public String getToStatus() {
         return toStatus;
     }
 
-    public void setToStatus(OrderStatus toStatus) {
+    public void setToStatus(String toStatus) {
         this.toStatus = toStatus;
     }
 

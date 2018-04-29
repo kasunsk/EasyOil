@@ -8,8 +8,8 @@ public class OrderHistoryParam {
     private Long historyId;
     private Long orderId;
     private HistoryType historyType;
-    private OrderStatus fromStatus;
-    private OrderStatus toStatus;
+    private String fromStatus;
+    private String toStatus;
     private String username;
     private String userNote;
     private String historyDate;
@@ -38,19 +38,19 @@ public class OrderHistoryParam {
         this.historyType = historyType;
     }
 
-    public OrderStatus getFromStatus() {
+    public String getFromStatus() {
         return fromStatus;
     }
 
-    public void setFromStatus(OrderStatus fromStatus) {
+    public void setFromStatus(String fromStatus) {
         this.fromStatus = fromStatus;
     }
 
-    public OrderStatus getToStatus() {
+    public String getToStatus() {
         return toStatus;
     }
 
-    public void setToStatus(OrderStatus toStatus) {
+    public void setToStatus(String toStatus) {
         this.toStatus = toStatus;
     }
 

@@ -42,6 +42,12 @@ public class OrderController {
     }
 
     @CrossOrigin
+    @RequestMapping(method = RequestMethod.PUT)
+    public Order update(@RequestBody Order order) {
+        return orderService.update(order);
+    }
+
+    @CrossOrigin
     @RequestMapping(value = "/load/{reference}", method = RequestMethod.GET)
     public Order loadOrderByReference(@PathVariable("reference") String reference) {
         return orderService.loadOrderByReference(reference);

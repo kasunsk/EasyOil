@@ -25,13 +25,11 @@ public class HistoryItemModel extends AbstractTrackableEntity {
     @Column(name = "HISTORY_TYPE", nullable = false)
     private HistoryType historyType;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "FROM_STATUS")
-    private OrderStatus fromStatus;
+    private String fromStatus;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "TO_STATUS")
-    private OrderStatus toStatus;
+    private String toStatus;
 
     @Column(name = "NOTE")
     private String historyNote;
@@ -75,19 +73,19 @@ public class HistoryItemModel extends AbstractTrackableEntity {
         return historyNote;
     }
 
-    public OrderStatus getFromStatus() {
+    public String getFromStatus() {
         return fromStatus;
     }
 
-    public void setFromStatus(OrderStatus fromStatus) {
+    public void setFromStatus(String fromStatus) {
         this.fromStatus = fromStatus;
     }
 
-    public OrderStatus getToStatus() {
+    public String getToStatus() {
         return toStatus;
     }
 
-    public void setToStatus(OrderStatus toStatus) {
+    public void setToStatus(String toStatus) {
         this.toStatus = toStatus;
     }
 

@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import static com.oilseller.oilbrocker.platform.util.ValidationUtil.validate;
 
@@ -47,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
     private OrderDetailModelAdaptor orderModelAdaptor = new OrderDetailModelAdaptor();
 
     @Autowired
-    public OrderServiceImpl(CustomerDao customerDao, OrderDao orderDao ,ProductService productService,
+    public OrderServiceImpl(CustomerDao customerDao, OrderDao orderDao, ProductService productService,
                             EmailService emailService, HistoryService historyService) {
         this.customerDao = customerDao;
         this.productService = productService;
@@ -90,10 +91,66 @@ public class OrderServiceImpl implements OrderService {
         }
         order.setOrderStatus(toOrderStatus);
         orderDao.save(order);
-        addHistoryItem(order,currentOrderStatus, toOrderStatus);
+        addHistoryItem(order, HistoryType.ORDER_SC,  currentOrderStatus.name(), toOrderStatus.name());
         sendOrderStatusUpdateEmail(toOrderStatus, order);
         return Boolean.TRUE;
     }
+
+    @Transactional
+    @Override
+    public Order update(Order order) {
+
+        OrderPlacementEntity orderEntity = orderDao.findOne(order.getOrderId());
+
+        if (orderEntity == null) {
+            throw new ServiceRuntimeException(ErrorCode.NOT_FOUND, "Order not found");
+        }
+
+        OrderStatus currentOrderStatus = orderEntity.getOrderStatus();
+        orderEntity.setOrderStatus(order.getOrderStatus());
+
+        Long currentPrice = orderEntity.getPrice();
+        orderEntity.setPrice(order.getPrice());
+
+        PaymentStatus currentPaymentStatus = orderEntity.getPaymentStatus();
+        orderEntity.setPaymentStatus(order.getPaymentStatus());
+
+        PaymentType paymentType = orderEntity.getPaymentType();
+        orderEntity.setPaymentType(order.getPaymentType());
+
+        orderDao.save(orderEntity);
+
+        if (currentOrderStatus != order.getOrderStatus()) {
+            addHistoryItem(orderEntity, HistoryType.ORDER_SC, currentOrderStatus.name(), order.getOrderStatus().name());
+            sendOrderStatusUpdateEmail(order.getOrderStatus(), orderEntity);
+        }
+
+        if (!Objects.equals(currentPrice, order.getPrice())) {
+            addHistoryItem(orderEntity, HistoryType.PAYMENT_AC, currentPrice.toString(), order.getPrice().toString());
+        }
+
+        if (currentPaymentStatus != order.getPaymentStatus()) {
+            addHistoryItem(orderEntity, HistoryType.PAYMENT_SC, currentPaymentStatus.name(), order.getPaymentStatus().name());
+        }
+
+        if (paymentType != order.getPaymentType()) {
+            addHistoryItem(orderEntity, HistoryType.PAYMENT_TC, paymentType.name(), order.getPaymentType().name());
+        }
+        return order;
+    }
+
+    private void addHistoryItem(OrderPlacementEntity order, HistoryType historyType, String currentStatus, String toPaymentType) {
+
+        HistoryItem historyItem = new HistoryItem();
+        historyItem.setHistoryType(historyType);
+        historyItem.setFromStatus(currentStatus);
+        historyItem.setToStatus(toPaymentType);
+        historyItem.setOrderId(order.getOrderId());
+        historyItem.setUsername(ThreadLocalContext.getUser());
+        historyItem.setUserNote(order.getOrderItem());
+        historyService.addHistoryItem(historyItem);
+    }
+
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -153,7 +210,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Order loadOrderByReference(String reference) {
-        OrderPlacementEntity orderEntity =  orderDao.findByOrderReference(reference);
+        OrderPlacementEntity orderEntity = orderDao.findByOrderReference(reference);
         if (orderEntity == null) {
             throw new ServiceRuntimeException(ErrorCode.NOT_FOUND, "Order not found");
         }
@@ -205,16 +262,6 @@ public class OrderServiceImpl implements OrderService {
         emailService.sendEmail(emailParam);
     }
 
-    private void addHistoryItem(OrderPlacementEntity order,OrderStatus currentStatus, OrderStatus toOrderStatus) {
-        HistoryItem historyItem = new HistoryItem();
-        historyItem.setHistoryType(HistoryType.ORDER_SC);
-        historyItem.setOrderId(order.getOrderId());
-        historyItem.setUsername(ThreadLocalContext.getUser());
-        historyItem.setUserNote(order.getOrderItem());
-        historyItem.setFromStatus(currentStatus);
-        historyItem.setToStatus(toOrderStatus);
-        historyService.addHistoryItem(historyItem);
-    }
 
     private String generateOrderReference(OrderPlacementRequest orderPlacementRequest) {
         String name = orderPlacementRequest.getCustomer().getCustomerName();
@@ -222,10 +269,10 @@ public class OrderServiceImpl implements OrderService {
         String currentTime = new Date().getTime() + "";
         String partThree = currentTime.substring(currentTime.length() - 2, currentTime.length());
         String address = orderPlacementRequest.getCustomer().getCustomerAddress();
-        String partTwo = address.substring(0,2);
+        String partTwo = address.substring(0, 2);
         String partFour = orderPlacementRequest.getOrderItemId() + "";
         String mobile = orderPlacementRequest.getCustomer().getMobileNumber();
-        String partFive = mobile.substring(mobile.length()-3, mobile.length());
+        String partFive = mobile.substring(mobile.length() - 3, mobile.length());
         String reference = partOne + partTwo + partThree + partFour + partFive;
         return reference.toLowerCase().trim();
     }
