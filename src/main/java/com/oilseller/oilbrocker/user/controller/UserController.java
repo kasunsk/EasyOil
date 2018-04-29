@@ -21,6 +21,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.POST)
     public Long addUser(@RequestBody UserParam userParam) {
         return userService.addUser(userParamAdaptor.fromParam(userParam));
