@@ -6,6 +6,9 @@ public class Order {
     private String orderReference;
     private OrderStatus orderStatus;
     private String orderItem;
+    private Long price;
+    private PaymentType paymentType;
+    private PaymentStatus paymentStatus;
     private String customerName;
     private String customerAddress;
     private String customerEmail;
@@ -43,6 +46,30 @@ public class Order {
 
     public void setOrderItem(String orderItem) {
         this.orderItem = orderItem;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
+    }
+
+    public PaymentType getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(PaymentType paymentType) {
+        this.paymentType = paymentType;
+    }
+
+    public PaymentStatus getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
     }
 
     public String getCustomerName() {

@@ -137,6 +137,9 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         order.setOrderId(orderEntity.getOrderId());
         order.setOrderItem(orderEntity.getOrderItem());
+        order.setPrice(orderEntity.getPrice());
+        order.setPaymentStatus(orderEntity.getPaymentStatus());
+        order.setPaymentType(orderEntity.getPaymentType());
         order.setCustomerAddress(customerEntity.getCustomerAddress());
         order.setOrderReference(orderEntity.getOrderReference());
         order.setOrderStatus(orderEntity.getOrderStatus());

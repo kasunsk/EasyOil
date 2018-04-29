@@ -52,7 +52,8 @@ public class RequestValidationInterceptor implements HandlerInterceptor {
         return !(request.getRequestURI().contains("login") || request.getRequestURI().contains("error")
                 || request.getMethod().equals(OPTIONS.toString()) || request.getRequestURI().contains("order/place")
                 || request.getRequestURI().contains("product/list") || request.getRequestURI().contains("productR/load")
-        || request.getRequestURI().contains("order/load"));
+        || request.getRequestURI().contains("order/load") || request.getRequestURI().contains("order/get/status")
+        || request.getRequestURI().contains("order/get/payment/status") || request.getRequestURI().contains("order/get/payment/type"));
     }
 
     private void validateUserToken(String userToken) {

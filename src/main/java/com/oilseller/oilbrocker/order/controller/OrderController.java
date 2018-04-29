@@ -2,15 +2,13 @@ package com.oilseller.oilbrocker.order.controller;
 
 import com.oilseller.oilbrocker.history.service.HistoryService;
 import com.oilseller.oilbrocker.order.adaptor.param.*;
-import com.oilseller.oilbrocker.order.dto.Order;
-import com.oilseller.oilbrocker.order.dto.OrderPlacementRequest;
-import com.oilseller.oilbrocker.order.dto.OrderPlacementResponse;
-import com.oilseller.oilbrocker.order.dto.OrderStatus;
+import com.oilseller.oilbrocker.order.dto.*;
 import com.oilseller.oilbrocker.order.param.*;
 import com.oilseller.oilbrocker.order.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -45,9 +43,34 @@ public class OrderController {
 
     @CrossOrigin
     @RequestMapping(value = "/load/{reference}", method = RequestMethod.GET)
-    public Order placeOrder(@PathVariable("reference") String reference) {
+    public Order loadOrderByReference(@PathVariable("reference") String reference) {
         return orderService.loadOrderByReference(reference);
     }
+
+    @CrossOrigin
+    @RequestMapping(value = "/get/{orderId}", method = RequestMethod.GET)
+    public Order loadOrderById(@PathVariable("orderId") Long orderId) {
+        return orderService.loadOrder(orderId);
+    }
+
+    @CrossOrigin
+    @RequestMapping(value = "/get/status", method = RequestMethod.GET)
+    public List<OrderStatus> loadAvailableOrderStatus() {
+        return Arrays.asList(OrderStatus.values());
+    }
+
+    @CrossOrigin
+    @RequestMapping(value = "/get/payment/status", method = RequestMethod.GET)
+    public List<PaymentStatus> loadAvailablePaymentStatus() {
+        return Arrays.asList(PaymentStatus.values());
+    }
+
+    @CrossOrigin
+    @RequestMapping(value = "/get/payment/type", method = RequestMethod.GET)
+    public List<PaymentType> loadAvailablePaymentType() {
+        return Arrays.asList(PaymentType.values());
+    }
+
 
     @RequestMapping(value = "/customer", method = RequestMethod.POST)
     public Long addCustomer(@RequestBody CustomerDetailsParam customerDetailsParam) {
