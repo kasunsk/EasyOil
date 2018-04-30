@@ -1,5 +1,6 @@
 package com.oilseller.oilbrocker.product.entity;
 
+import com.oilseller.oilbrocker.platform.dto.Currency;
 import com.oilseller.oilbrocker.platform.entity.AbstractTrackableEntity;
 import com.oilseller.oilbrocker.product.dto.ProductStatus;
 
@@ -37,8 +38,9 @@ public class ProductEntity extends AbstractTrackableEntity {
     @Column(name = "PRICE", nullable = false)
     private Long price;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "CURRENCY", nullable = false)
-    private String currency;
+    private Currency currency;
 
     @Column(name = "IMAGE_URL", nullable = false)
     private String image;
@@ -103,11 +105,11 @@ public class ProductEntity extends AbstractTrackableEntity {
         this.price = price;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(Currency currency) {
         this.currency = currency;
     }
 

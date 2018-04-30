@@ -43,7 +43,7 @@ public class UserInterceptor implements HandlerInterceptor {
                 || request.getMethod().equals(OPTIONS.toString()) || request.getRequestURI().contains("order/place")
                 || request.getRequestURI().contains("product/list") || request.getRequestURI().contains("product/load")
                 || request.getRequestURI().contains("order/load") || request.getRequestURI().contains("order/get/status")
-                || request.getRequestURI().contains("order/get/payment/status") || request.getRequestURI().contains("order/get/payment/type")
+                || request.getRequestURI().contains("order/get/payment/status") || request.getRequestURI().contains("order/get/payment/type") || request.getRequestURI().contains("product/available/status")  || request.getRequestURI().contains("product/available/currencies")
         );
     }
 

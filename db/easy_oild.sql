@@ -19,9 +19,9 @@ CREATE TABLE PRODUCT (
   PRIMARY KEY (ITEM_ID)
 )ENGINE=InnoDB;
 
-INSERT INTO PRODUCT VALUES (1, 'abcd', 'Shesha Hair Oil', 25, 'This is only for hair','AVAILABLE', 1490, 'Rs','http://2.bp.blogspot.com/-NYEfYYLAJNA/VbpniMdwCOI/AAAAAAAAf0M/P-NkPJutW5M/s500/Oshea%2BHerbals%2BPhytogain%2BHair%2BVitalizer%2BReview%252C%2BPrice%252C%2BHow%2Bto%2BUse.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL , 0);
+INSERT INTO PRODUCT VALUES (1, 'abcd', 'Shesha Hair Oil', 25, 'This is only for hair','AVAILABLE', 1490, 'LKR','http://2.bp.blogspot.com/-NYEfYYLAJNA/VbpniMdwCOI/AAAAAAAAf0M/P-NkPJutW5M/s500/Oshea%2BHerbals%2BPhytogain%2BHair%2BVitalizer%2BReview%252C%2BPrice%252C%2BHow%2Bto%2BUse.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL , 0);
 
-INSERT INTO PRODUCT VALUES (2, 'sdca', 'Sandi Sudha', 20, 'This is only for skin','AVAILABLE', 3490, 'Rs','https://www.sandhisudhaplus.com/Images/slide1.jpg',  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL , 0);
+INSERT INTO PRODUCT VALUES (2, 'sdca', 'Sandi Sudha', 20, 'This is only for skin','AVAILABLE', 3490, 'LKR','https://www.sandhisudhaplus.com/Images/slide1.jpg',  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL , 0);
 
 CREATE TABLE CUSTOMER (
   CUSTOMER_ID INT NOT NULL auto_increment,

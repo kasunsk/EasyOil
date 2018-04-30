@@ -1,11 +1,14 @@
 package com.oilseller.oilbrocker.product.controller;
 
+import com.oilseller.oilbrocker.platform.dto.Currency;
 import com.oilseller.oilbrocker.product.adaptor.ProductParamAdaptor;
+import com.oilseller.oilbrocker.product.dto.ProductStatus;
 import com.oilseller.oilbrocker.product.param.ProductParam;
 import com.oilseller.oilbrocker.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -34,6 +37,18 @@ public class ProductController {
     @RequestMapping(value = "/load/{productId}", method = RequestMethod.GET)
     public ProductParam getProduct(@PathVariable("productId") Long productId) {
         return productParamAdaptor.fromDto(productService.loadProduct(productId));
+    }
+
+    @CrossOrigin
+    @RequestMapping(value = "/available/currencies",method = RequestMethod.GET)
+    public List<Currency> loadAvailableCurrencies() {
+        return Arrays.asList(Currency.values());
+    }
+
+    @CrossOrigin
+    @RequestMapping(value = "/available/status",method = RequestMethod.GET)
+    public List<ProductStatus> loadAvailableStatus() {
+        return Arrays.asList(ProductStatus.values());
     }
 
     @CrossOrigin

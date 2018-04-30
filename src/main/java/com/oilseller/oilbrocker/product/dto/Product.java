@@ -1,5 +1,7 @@
 package com.oilseller.oilbrocker.product.dto;
 
+import com.oilseller.oilbrocker.platform.dto.Currency;
+
 import java.util.Date;
 
 /**
@@ -13,7 +15,7 @@ public class Product {
     private Long availableAmount;
     private String description;
     private Long price;
-    private String currency;
+    private Currency currency;
     private ProductStatus status;
     private String image;
     private Date validTo;
@@ -69,11 +71,11 @@ public class Product {
         this.price = price;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(Currency currency) {
         this.currency = currency;
     }
 
