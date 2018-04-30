@@ -157,6 +157,11 @@ public class OrderServiceImpl implements OrderService {
     public String placeOrder(OrderPlacementRequest orderPlacementRequest) {
         validateOrderPlacement(orderPlacementRequest);
         Product product = productService.loadProduct(orderPlacementRequest.getOrderItemId());
+
+        if (product == null) {
+            log.error("Product not found for id {} ", orderPlacementRequest.getOrderItemId());
+            throw new ServiceRuntimeException(ErrorCode.NOT_FOUND, "Product not found");
+        }
         validateSubmittedPrice(orderPlacementRequest, product);
         OrderPlacementEntity orderEntity = orderPlacementModelAdaptor.fromDto(orderPlacementRequest);
         String orderReference = generateOrderReference(orderPlacementRequest);

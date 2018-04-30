@@ -1,5 +1,7 @@
 package com.oilseller.oilbrocker.order.dto;
 
+import com.oilseller.oilbrocker.platform.dto.Currency;
+
 import java.util.Date;
 
 public class OrderDetail {
@@ -11,7 +13,7 @@ public class OrderDetail {
     private String orderItem;
     private Long amount;
     private Long price;
-    private String currency;
+    private Currency currency;
     private PaymentType paymentType;
     private PaymentStatus paymentStatus;
     private OrderStatus orderStatus;
@@ -75,11 +77,11 @@ public class OrderDetail {
         this.price = price;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(Currency currency) {
         this.currency = currency;
     }
 

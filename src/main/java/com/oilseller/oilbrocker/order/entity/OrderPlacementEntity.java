@@ -3,6 +3,7 @@ package com.oilseller.oilbrocker.order.entity;
 import com.oilseller.oilbrocker.order.dto.OrderStatus;
 import com.oilseller.oilbrocker.order.dto.PaymentStatus;
 import com.oilseller.oilbrocker.order.dto.PaymentType;
+import com.oilseller.oilbrocker.platform.dto.Currency;
 import com.oilseller.oilbrocker.platform.entity.AbstractTrackableEntity;
 
 import javax.persistence.*;
@@ -34,8 +35,9 @@ public class OrderPlacementEntity extends AbstractTrackableEntity {
     @Column(name = "PRICE", nullable = false)
     private Long price;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "CURRENCY", nullable = false)
-    private String currency;
+    private Currency currency;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "PAYMENT_TYPE", nullable = false)
@@ -105,11 +107,11 @@ public class OrderPlacementEntity extends AbstractTrackableEntity {
         this.price = price;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(Currency currency) {
         this.currency = currency;
     }
 

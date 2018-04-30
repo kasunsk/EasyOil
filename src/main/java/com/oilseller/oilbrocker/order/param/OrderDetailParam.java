@@ -1,6 +1,8 @@
 package com.oilseller.oilbrocker.order.param;
 
 
+import com.oilseller.oilbrocker.platform.dto.Currency;
+
 public class OrderDetailParam {
 
     private Long orderId;
@@ -10,7 +12,7 @@ public class OrderDetailParam {
     private String orderItem;
     private Long amount;
     private Long price;
-    private String currency;
+    private Currency currency;
     private String paymentType;
     private String paymentStatus;
     private String orderStatus;
@@ -74,11 +76,11 @@ public class OrderDetailParam {
         this.price = price;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(Currency currency) {
         this.currency = currency;
     }
 
