@@ -63,4 +63,10 @@ public class ProductController {
         return productService.updateProduct(productParamAdaptor.fromParam(productParam)).getId();
     }
 
+    @CrossOrigin
+    @RequestMapping(value = "{productId}",method = RequestMethod.DELETE)
+    public Boolean removeProduct(@PathVariable("productId") Long productId) {
+        return productService.removeProduct(productId);
+    }
+
 }

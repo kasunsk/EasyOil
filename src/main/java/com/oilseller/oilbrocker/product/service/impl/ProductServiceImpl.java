@@ -98,6 +98,19 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
+    public Boolean removeProduct(Long productId) {
+        ProductEntity product = productDao.findOne(productId);
+
+        if (product == null) {
+            log.error("Product not found for id : {}", productId);
+            throw new ServiceRuntimeException(ErrorCode.NOT_FOUND, "Product Not Found");
+        }
+        productDao.delete(productId);
+        return Boolean.TRUE;
+    }
+
+    @Transactional
+    @Override
     public Product loadProduct(Long orderItemId) {
         return productAdaptor.fromModel(productDao.findOne(orderItemId));
     }

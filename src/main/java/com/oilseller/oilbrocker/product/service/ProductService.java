@@ -17,5 +17,7 @@ public interface ProductService {
 
     Boolean reduceProductAmount(Long itemId, Long reduceAmount);
 
+    Boolean removeProduct(Long productId);
+
     Product loadProduct(Long orderItem);
 }
