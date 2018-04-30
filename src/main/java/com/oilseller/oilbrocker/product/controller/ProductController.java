@@ -57,9 +57,10 @@ public class ProductController {
         return productService.addProduct(productParamAdaptor.fromParam(productParam));
     }
 
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.PUT)
-    public ProductParam updateProduct(@RequestBody ProductParam productParam) {
-        return productParamAdaptor.fromDto(productService.updateProduct(productParamAdaptor.fromParam(productParam)));
+    public Long updateProduct(@RequestBody ProductParam productParam) {
+        return productService.updateProduct(productParamAdaptor.fromParam(productParam)).getId();
     }
 
 }

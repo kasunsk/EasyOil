@@ -29,6 +29,9 @@ public class ProductParamAdaptor extends AbstractParamAdaptor<ProductParam, Prod
 
     @Override
     public Product fromParam(ProductParam document) {
+        document.setLastModifiedDate(null);
+        document.setCreatedDate(null);
+
         Product product = super.fromParam(document);
         try {
             product.setValidTo(DateUtil.fromSimpleDateStringToSimpleDate(document.getValidUntil()));
