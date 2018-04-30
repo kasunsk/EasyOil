@@ -14,5 +14,7 @@ public interface ErrorCode {
 
     String INVALID_INPUT ="Input is Invalid";
 
+    String PRIVILEGE_ERROR = "No enough privilege";
+
 
 }

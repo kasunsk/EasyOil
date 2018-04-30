@@ -48,6 +48,9 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 apiError = new ApiError(HttpStatus.BAD_REQUEST);
                 apiError.setMessage(ex.getMessage());
                 break;
+            case ErrorCode.PRIVILEGE_ERROR:
+                apiError = new ApiError(HttpStatus.BAD_REQUEST);
+                apiError.setMessage(ex.getMessage());
             default:
                 apiError = new ApiError(HttpStatus.NOT_ACCEPTABLE, ex.getMessage(), ex);
                 break;

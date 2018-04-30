@@ -36,6 +36,12 @@ public class UserController {
     }
 
     @CrossOrigin
+    @RequestMapping(value = "{userId}", method = RequestMethod.DELETE)
+    public Boolean removeUser(@PathVariable("userId") Long userId) {
+        return userService.removeUser(userId);
+    }
+
+    @CrossOrigin
     @RequestMapping(value = "/availableRoles", method = RequestMethod.GET)
     public List<UserRoleType> loadAvailableRoles() {
         return Arrays.asList(UserRoleType.values());

@@ -14,5 +14,7 @@ public interface UserService {
 
     List<User> loadAllUsers();
 
+    Boolean removeUser(Long userId);
+
     void invalidLogins();
 }

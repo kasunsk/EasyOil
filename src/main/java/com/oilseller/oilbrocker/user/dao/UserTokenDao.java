@@ -25,4 +25,6 @@ public interface UserTokenDao extends JpaRepository<UserTokenModel, Long> {
 
     void deleteAllByTokenStatusAndLastModifiedDateLessThan(TokenStatus tokenStatus,Date date);
 
+    void deleteAllByUserId(Long userId);
+
 }
