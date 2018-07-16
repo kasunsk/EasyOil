@@ -27,6 +27,7 @@ repositories {
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springfranework.boot:spring-boot-started-cache')
 	compile('org.modelmapper:modelmapper:' + modelMapperVersion)
 	compile('mysql:mysql-connector-java')
 	compile 'com.sun.mail:javax.mail:1.5.5'

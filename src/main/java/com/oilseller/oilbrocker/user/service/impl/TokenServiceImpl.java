@@ -8,6 +8,7 @@ import com.oilseller.oilbrocker.user.entity.UserModel;
 import com.oilseller.oilbrocker.user.entity.UserTokenModel;
 import com.oilseller.oilbrocker.user.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +48,7 @@ public class TokenServiceImpl implements TokenService {
 
     @Transactional
     @Override
+    @Cacheable("validToken")
     public Boolean isValidRequest(String userToken) {
 
         UserTokenModel tokenModel = userTokenDao.findByUserToken(userToken);
@@ -73,6 +75,7 @@ public class TokenServiceImpl implements TokenService {
 
     @Transactional
     @Override
+    @Cacheable(value = "userName")
     public String getUsername(String userToken) {
 
         UserTokenModel tokenModel = userTokenDao.findByUserToken(userToken);
