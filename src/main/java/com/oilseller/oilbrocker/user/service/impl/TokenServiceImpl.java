@@ -7,6 +7,8 @@ import com.oilseller.oilbrocker.user.dto.TokenStatus;
 import com.oilseller.oilbrocker.user.entity.UserModel;
 import com.oilseller.oilbrocker.user.entity.UserTokenModel;
 import com.oilseller.oilbrocker.user.service.TokenService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.Environment;
@@ -18,6 +20,8 @@ import java.util.List;
 
 @Service("tokenService")
 public class TokenServiceImpl implements TokenService {
+
+    private static final Logger log = LoggerFactory.getLogger(TokenServiceImpl.class);
 
     private UserDao userDao;
     private UserTokenDao userTokenDao;
@@ -48,7 +52,6 @@ public class TokenServiceImpl implements TokenService {
 
     @Transactional
     @Override
-    @Cacheable("validToken")
     public Boolean isValidRequest(String userToken) {
 
         UserTokenModel tokenModel = userTokenDao.findByUserToken(userToken);
@@ -77,7 +80,7 @@ public class TokenServiceImpl implements TokenService {
     @Override
     @Cacheable(value = "userName")
     public String getUsername(String userToken) {
-
+        log.info("Invoked getUserName .......");
         UserTokenModel tokenModel = userTokenDao.findByUserToken(userToken);
         return tokenModel.getUsername();
     }
