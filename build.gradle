@@ -31,6 +31,7 @@ dependencies {
 	compile('org.modelmapper:modelmapper:' + modelMapperVersion)
 	compile('mysql:mysql-connector-java')
 	compile 'com.sun.mail:javax.mail:1.5.5'
+	compile 'org.hibernate:hibernate-ehcache'
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
