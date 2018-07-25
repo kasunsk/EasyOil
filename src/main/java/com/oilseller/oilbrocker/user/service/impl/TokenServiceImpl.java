@@ -1,5 +1,7 @@
 package com.oilseller.oilbrocker.user.service.impl;
 
+import com.oilseller.oilbrocker.platform.exception.dto.ErrorCode;
+import com.oilseller.oilbrocker.platform.exception.dto.ServiceRuntimeException;
 import com.oilseller.oilbrocker.platform.thread.ThreadLocalContext;
 import com.oilseller.oilbrocker.user.dao.UserDao;
 import com.oilseller.oilbrocker.user.dao.UserTokenDao;
@@ -10,12 +12,15 @@ import com.oilseller.oilbrocker.user.service.TokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+
+import static com.oilseller.oilbrocker.platform.cache.PlatformCacheConfig.USERNAME_CACHE;
 
 @Service("tokenService")
 public class TokenServiceImpl implements TokenService {
@@ -27,14 +32,11 @@ public class TokenServiceImpl implements TokenService {
 
     private Environment environment;
 
-    private UserHelper userHelper;
-
     @Autowired
-    public TokenServiceImpl(UserDao userDao, UserTokenDao userTokenDao, Environment environment, UserHelper userHelper) {
+    public TokenServiceImpl(UserDao userDao, UserTokenDao userTokenDao, Environment environment) {
         this.userTokenDao = userTokenDao;
         this.userDao = userDao;
         this.environment = environment;
-        this.userHelper = userHelper;
     }
 
     @Transactional
@@ -78,10 +80,15 @@ public class TokenServiceImpl implements TokenService {
         userTokenDao.save(userToken);
     }
 
+    @Cacheable(value = USERNAME_CACHE)
     @Transactional
     @Override
     public String getUsername(String userToken) {
-        UserTokenModel tokenModel = userHelper.getByUserToken(userToken);
+        UserTokenModel tokenModel = userTokenDao.findByUserToken(userToken);
+
+        if (tokenModel == null) {
+            throw new ServiceRuntimeException(ErrorCode.NOT_FOUND, "Token not found");
+        }
         return tokenModel.getUsername();
     }
 
