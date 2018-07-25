@@ -10,7 +10,6 @@ import com.oilseller.oilbrocker.user.service.TokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,11 +27,14 @@ public class TokenServiceImpl implements TokenService {
 
     private Environment environment;
 
+    private UserHelper userHelper;
+
     @Autowired
-    public TokenServiceImpl(UserDao userDao, UserTokenDao userTokenDao, Environment environment) {
+    public TokenServiceImpl(UserDao userDao, UserTokenDao userTokenDao, Environment environment, UserHelper userHelper) {
         this.userTokenDao = userTokenDao;
         this.userDao = userDao;
         this.environment = environment;
+        this.userHelper = userHelper;
     }
 
     @Transactional
@@ -54,7 +56,7 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public Boolean isValidRequest(String userToken) {
 
-        UserTokenModel tokenModel = userTokenDao.findByUserToken(userToken);
+        UserTokenModel tokenModel = userHelper.getByUserToken(userToken);
 
         if (tokenModel != null) {
             Long currentNumOfRequest = tokenModel.getNumOfRequest();
@@ -71,17 +73,15 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public void invalidToken() {
         String accessToken = ThreadLocalContext.getAccessToken();
-        UserTokenModel userToken = userTokenDao.findByUserToken(accessToken);
+        UserTokenModel userToken = userHelper.getByUserToken(accessToken);
         userToken.setTokenStatus(TokenStatus.INVALID);
         userTokenDao.save(userToken);
     }
 
     @Transactional
     @Override
-    @Cacheable(value = "userName")
     public String getUsername(String userToken) {
-        log.info("Invoked getUserName .......");
-        UserTokenModel tokenModel = userTokenDao.findByUserToken(userToken);
+        UserTokenModel tokenModel = userHelper.getByUserToken(userToken);
         return tokenModel.getUsername();
     }
 
