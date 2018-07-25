@@ -56,7 +56,7 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public Boolean isValidRequest(String userToken) {
 
-        UserTokenModel tokenModel = userHelper.getByUserToken(userToken);
+        UserTokenModel tokenModel = userTokenDao.findByUserToken(userToken);
 
         if (tokenModel != null) {
             Long currentNumOfRequest = tokenModel.getNumOfRequest();
@@ -73,7 +73,7 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public void invalidToken() {
         String accessToken = ThreadLocalContext.getAccessToken();
-        UserTokenModel userToken = userHelper.getByUserToken(accessToken);
+        UserTokenModel userToken = userTokenDao.findByUserToken(accessToken);
         userToken.setTokenStatus(TokenStatus.INVALID);
         userTokenDao.save(userToken);
     }
