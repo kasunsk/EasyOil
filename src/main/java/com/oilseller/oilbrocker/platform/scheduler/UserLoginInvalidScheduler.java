@@ -7,12 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import static com.oilseller.oilbrocker.platform.scheduler.ScheduleTime.HALF_AN_OUR;
+import static com.oilseller.oilbrocker.platform.scheduler.ScheduleTime.ONE_MINUET;
+import static com.oilseller.oilbrocker.platform.scheduler.ScheduleTime.THREE_DAYS;
+
 
 @Component
 public class UserLoginInvalidScheduler {
 
     private static final Logger log = LoggerFactory.getLogger(UserLoginInvalidScheduler.class);
-    
+
     private TokenService tokenService;
 
     @Autowired
@@ -20,15 +24,13 @@ public class UserLoginInvalidScheduler {
         this.tokenService = tokenService;
     }
 
-    // per half an hone
-    @Scheduled(fixedDelay = 1800000, initialDelay = 10000)
+    @Scheduled(fixedDelay = HALF_AN_OUR, initialDelay = ONE_MINUET)
     public void invalidLogin() {
         log.info("Token invalid scheduler");
         tokenService.invalidLogin();
     }
 
-    // Per 3 days
-    @Scheduled(fixedDelay = 259200000, initialDelay = 20000)
+    @Scheduled(fixedDelay = THREE_DAYS, initialDelay = ONE_MINUET)
     public void removeInvalidLogin() {
         log.info("Token removing scheduler");
         tokenService.removeInvalidToken();

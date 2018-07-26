@@ -3,6 +3,7 @@ package com.oilseller.oilbrocker.product.entity;
 import com.oilseller.oilbrocker.platform.dto.Currency;
 import com.oilseller.oilbrocker.platform.entity.AbstractTrackableEntity;
 import com.oilseller.oilbrocker.product.dto.ProductStatus;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,7 +12,9 @@ import java.util.Date;
  * Created by kasun on 2/21/18.
  */
 @Entity
+@Cacheable
 @Table(name = "PRODUCT")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class ProductEntity extends AbstractTrackableEntity {
 
     @Id

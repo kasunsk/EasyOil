@@ -48,8 +48,7 @@ public class OrderServiceImpl implements OrderService {
     private OrderDetailModelAdaptor orderModelAdaptor = new OrderDetailModelAdaptor();
 
     @Autowired
-    public OrderServiceImpl(CustomerDao customerDao, OrderDao orderDao, ProductService productService,
-                            EmailService emailService, HistoryService historyService) {
+    public OrderServiceImpl(CustomerDao customerDao, OrderDao orderDao, ProductService productService, EmailService emailService, HistoryService historyService) {
         this.customerDao = customerDao;
         this.productService = productService;
         this.orderDao = orderDao;
@@ -91,7 +90,7 @@ public class OrderServiceImpl implements OrderService {
         }
         order.setOrderStatus(toOrderStatus);
         orderDao.save(order);
-        addHistoryItem(order, HistoryType.ORDER_SC,  currentOrderStatus.name(), toOrderStatus.name());
+        addHistoryItem(order, HistoryType.ORDER_SC, currentOrderStatus.name(), toOrderStatus.name());
         sendOrderStatusUpdateEmail(toOrderStatus, order);
         return Boolean.TRUE;
     }
