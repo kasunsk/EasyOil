@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static com.oilseller.oilbrocker.platform.interceptor.ApplicationHttpUri.*;
 import static org.springframework.http.HttpMethod.OPTIONS;
 
 @Component
@@ -39,11 +40,11 @@ public class UserInterceptor implements HandlerInterceptor {
     }
 
     private boolean isaAuthenticateRequired(HttpServletRequest request) {
-        return !(request.getRequestURI().contains("login") || request.getRequestURI().contains("error")
-                || request.getMethod().equals(OPTIONS.toString()) || request.getRequestURI().contains("order/place")
-                || request.getRequestURI().contains("product/list") || request.getRequestURI().contains("product/load")
-                || request.getRequestURI().contains("order/load") || request.getRequestURI().contains("order/get/status")
-                || request.getRequestURI().contains("order/get/payment/status") || request.getRequestURI().contains("order/get/payment/type") || request.getRequestURI().contains("product/available/status")  || request.getRequestURI().contains("product/available/currencies")
+        return !(request.getRequestURI().contains(LOGIN) || request.getRequestURI().contains(ERROR)
+                || request.getMethod().equals(OPTIONS.toString()) || request.getRequestURI().contains(ORDER_PLACE)
+                || request.getRequestURI().contains(PRODUCT_LIST) || request.getRequestURI().contains(PRODUCT_LOAD)
+                || request.getRequestURI().contains(ORDER_LOAD) || request.getRequestURI().contains(ORDER_STATUS)
+                || request.getRequestURI().contains(ORDER_PAYMENT_STATUS) || request.getRequestURI().contains(ORDER_PAYMENT_TYPE) || request.getRequestURI().contains(PRODUCT_AVAILABLE_STATUS)  || request.getRequestURI().contains(PRODUCT_AVAILABLE_CURRENCIES)
         );
     }
 
