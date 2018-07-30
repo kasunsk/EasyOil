@@ -170,6 +170,7 @@ public class OrderServiceImpl implements OrderService {
         orderEntity.setOrderItem(product.getSellingItem());
         Long customerId = customerDao.save(customerModelAdaptor.fromDto(orderPlacementRequest.getCustomer())).getCustomerId();
         orderEntity.setCustomerId(customerId);
+        //TODO Change after implement
         orderEntity.setPaymentReference("COD");
         orderEntity.setOrderStatus(OrderStatus.PLACED);
         orderDao.save(orderEntity);
@@ -186,8 +187,7 @@ public class OrderServiceImpl implements OrderService {
         if (orderEntity == null) {
             throw new ServiceRuntimeException(ErrorCode.NOT_FOUND, "Order not found");
         }
-        Order order = getOrder(orderEntity);
-        return order;
+        return getOrder(orderEntity);
     }
 
     private Order getOrder(OrderPlacementEntity orderEntity) {
@@ -218,8 +218,7 @@ public class OrderServiceImpl implements OrderService {
         if (orderEntity == null) {
             throw new ServiceRuntimeException(ErrorCode.NOT_FOUND, "Order not found");
         }
-        Order order = getOrder(orderEntity);
-        return order;
+        return getOrder(orderEntity);
 
     }
 
